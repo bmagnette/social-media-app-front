@@ -1,0 +1,25 @@
+.text-area-widget {
+    height: 40px;
+    background-color: white;
+    width: 450px;
+    display: flex;
+    .widget {
+        width: 45px;
+        height: 40px;
+        cursor: pointer;
+        border-right: 1px solid grey;
+        .widget-display {
+            display: block;
+        }
+
+        .widget-hide {
+            display: none;
+        }
+        text-align: center;
+
+        span {
+            margin-top: 7px;
+            font-size: 25px;
+        }
+    }
+}

@@ -1,0 +1,136 @@
+@import '../../styles';
+
+.menu-wrapper {
+    width: 100%;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    height: 62px;
+    color: $blue;
+    font-weight: 700;
+
+    ul {
+        display: flex;
+        padding: 0;
+
+        &:last-child {
+            justify-content: end;
+        }
+
+        li {
+            display: block;
+            min-width: 100px;
+            text-align: center;
+            padding: 20px 20px 0;
+            height: 62px;
+
+            &:first-child {
+                padding-left: 0;
+            }
+
+            &:hover {
+                color: $blue;
+            }
+        }
+
+        &:first-child{
+            li{
+                padding-top: 15px !important;
+            }
+        }
+    }
+
+    button {
+        background-color: $blue;
+        min-width: 100px;
+        border-radius: 4px;
+        height: 35px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .menu-logo {
+        font-weight: 600;
+        font-size: 22px;
+    }
+}
+
+.button-menu {
+    padding: 13.5px !important;
+}
+
+.header_menu_wrapper {
+    display: block;
+}
+
+#menu-demo2 ul li:hover {
+    color: white !important;
+}
+
+#menu-demo2 li {
+    width: 200px;
+    cursor: pointer;
+
+    &:hover {
+        color: white;
+    }
+}
+
+#menu-demo2,
+#menu-demo2 ul {
+    display: block !important;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+}
+#menu-demo2 li {
+    display: inline-block;
+    position: relative;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#menu-demo2 ul {
+    position: absolute;
+    z-index: 1000;
+    max-height: 0;
+    left: 0;
+    top: 62px;
+    right: 0;
+    overflow: hidden;
+    -moz-transition: 0.8s all 0.3s;
+    -webkit-transition: 0.8s all 0.3s;
+    transition: 0.8s all 0.3s;
+}
+
+#menu-demo2 li:hover ul {
+    max-height: 20em;
+}
+
+/* background des liens sous menus */
+#menu-demo2 li li {
+    background: $blue-hover;
+}
+
+/* background des liens menus et sous menus au survol */
+#menu-demo2 li:hover,
+#menu-demo2 li li:hover {
+    background: $blue;
+}
+
+#menu-demo2 a {
+    text-decoration: none;
+    display: block;
+    color: white;
+    font-family: arial, serif;
+}
+
+#menu-demo2 li:hover li a {
+    color: #fff;
+    text-transform: inherit;
+}
+#menu-demo2 li:hover a,
+#menu-demo2 li li:hover a {
+    color: white;
+}
