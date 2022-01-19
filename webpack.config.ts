@@ -5,7 +5,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 const webpackConfig = (): Configuration => ({
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     ...(process.env.production || !process.env.development
         ? {}
         : {devtool: 'eval-source-map'}),
