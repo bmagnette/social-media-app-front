@@ -1,0 +1,24 @@
+.hide {
+    display: none;
+}
+
+.react-tabs ul{
+    min-height: 0 !important;
+    border-bottom: none !important;
+}
+
+.react-tabs__tab-list{
+    margin: 0 !important;
+    overflow: hidden;
+    li{
+
+        &:hover{
+            cursor: default;
+        }
+
+        &:focus{
+            border: none;
+            box-shadow: none;
+        }
+    }
+}

@@ -1,20 +1,25 @@
 .accounts-card-wrapper {
     display: flex;
     text-align: center;
-    margin-bottom: 10px;
+    border: 1px solid beige;
+    background-color: #f8f9fa;
+    border-radius: 7px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+    padding: 10px;
+    .transparent {
+        img {
+            -webkit-filter: grayscale(
+                1
+            ); /* Google Chrome, Safari 6+ & Opera 15+ */
 
-    .transparent{
-        img{
-            -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
-
-            &:hover{
+            &:hover {
                 -webkit-filter: grayscale(0);
                 filter: none;
             }
         }
     }
 
-    .cursor{
+    .cursor {
         cursor: pointer;
     }
 
@@ -37,5 +42,11 @@
         padding: 15px;
         text-align: center;
         border-radius: 10px;
+    }
+
+    li{
+        min-width: 100px;
+        width: 100px;
+        overflow-x: hidden;
     }
 }

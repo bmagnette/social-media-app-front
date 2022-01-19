@@ -16,6 +16,18 @@
   }
 }
 
+.disabled{
+  min-width: 220px;
+  min-height: 50px;
+  line-height: 50px;
+  border-radius: 15px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: $blue-hover;
+  cursor: not-allowed;
+}
+
 
 .big-square-blue {
   cursor: pointer;

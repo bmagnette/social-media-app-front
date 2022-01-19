@@ -1,13 +1,17 @@
 .text-area-widget {
     height: 40px;
-    background-color: white;
-    width: 450px;
     display: flex;
+    justify-content: space-between;
+    .emoji-picker-react{
+        z-index: 1;
+    }
+    .left-widget{
+        display: flex;
+    }
     .widget {
         width: 45px;
         height: 40px;
         cursor: pointer;
-        border-right: 1px solid grey;
         .widget-display {
             display: block;
         }
@@ -21,5 +25,17 @@
             margin-top: 7px;
             font-size: 25px;
         }
+
+        img{
+            margin-top: 7.5px;
+        }
+
+        &:last-child{
+            float: right;
+        }
     }
+}
+
+.disabled-button{
+    cursor: not-allowed !important;
 }

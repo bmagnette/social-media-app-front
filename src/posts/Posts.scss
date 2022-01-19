@@ -3,20 +3,31 @@
     button {
         float: right;
     }
+
+    .button-wrapper{
+        height: 150px;
+    }
+
+    .add-picture-button{
+        float: left !important;
+    }
     .selection-wrapper {
         margin-top: 20px;
         margin-bottom: 20px;
     }
+
     ul {
         list-style-type: none;
         overflow-x: auto;
         min-height: 82px;
-        border-bottom: 2px solid $blue-hover;
         padding: 5px;
+
+        &:first-of-type {
+            margin: 0;
+        }
     }
 
     .text-area-wrapper {
-        width: 450px;
 
         textarea {
             border-radius: 10px 10px 0 0;

@@ -2,6 +2,7 @@ import React from 'react';
 import {
     closeCategory,
     getAccountsByCategory,
+    getAccountsWithoutCategory,
     getCategory,
 } from '../../services/services';
 import {CloseCircleFilled, FormOutlined} from '@ant-design/icons';
@@ -10,7 +11,12 @@ export const CategoryList = (props) => {
     const closeConnection = (_id) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         closeCategory(_id).then((r) => {
-            props.loadCategories().then((r) => console.log(r));
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            props.loadCategories().then((r) => {
+                getAccountsWithoutCategory().then((r) => {
+                    props.setter.setNoCategoryAccounts(r);
+                });
+            });
         });
     };
 
@@ -23,6 +29,10 @@ export const CategoryList = (props) => {
             getAccountsByCategory(_id).then((r) =>
                 props.setter.setActiveAccounts(r),
             );
+            getAccountsWithoutCategory().then((r) => {
+                props.setter.setNoCategoryAccounts(r);
+                props.setter.setNoCategoriesAccounts(r);
+            });
         });
     };
 
@@ -45,9 +55,13 @@ export const CategoryList = (props) => {
                             </li>
                         );
                     })}
-                    {props.categories.length === 0
-                        ? 'There is not category yet.'
-                        : ''}
+                    {props.categories.length === 0 ? (
+                        <div className={'bull-info'}>
+                            There is not category yet.
+                        </div>
+                    ) : (
+                        ''
+                    )}
                 </ul>
             )}
         </>

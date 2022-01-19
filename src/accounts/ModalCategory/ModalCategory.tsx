@@ -1,15 +1,21 @@
 import {Button, Modal} from 'antd';
 import {InputField} from '../../shared/Input/input';
-import {clickOnList} from '../../shared/helpers/function';
 import React from 'react';
-import {addCategory, editCategory} from '../../services/services';
+import {
+    addCategory,
+    editCategory,
+    getAccountsWithoutCategory,
+} from '../../services/services';
+import {AccountCard} from '../../shared/Account/AccountCard';
+import {v4 as uuidv4} from 'uuid';
+import {clickOnList} from '../../shared/helpers/function';
 
 export const ModalCategory = (props) => {
     const {
         setCategoryName,
         setCategoryDescription,
+        setNoCategoryAccounts,
         setLoading,
-        accounts,
         categoryName,
         categoryDescription,
         isEditable,
@@ -19,8 +25,13 @@ export const ModalCategory = (props) => {
         isVisible,
         isLoading,
         setEditable,
+
+        setActiveAccounts,
         activeAccounts,
+        noCategoriesAccounts,
+        setNoCategoriesAccounts,
     } = props.modalParams;
+
     const setCategoryNameField = (e) => {
         setCategoryName(e.target.value);
     };
@@ -31,24 +42,41 @@ export const ModalCategory = (props) => {
 
     const handleOk = () => {
         setLoading(true);
-        const activeAccounts = accounts.filter((account) => {
-            return account.isActive === true;
-        });
-        const payload = {
-            accounts: activeAccounts,
-            categoryName: categoryName,
-            categoryDescription: categoryDescription,
-        };
 
         if (isEditable) {
+            const payload = {
+                accounts: activeAccounts,
+                categoryName: categoryName,
+                categoryDescription: categoryDescription,
+            };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             editCategory(isEditable, payload).then((r) => {
-                loadCategories().then((r) => console.log(r));
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                loadCategories().then((r) => {
+                    getAccountsWithoutCategory().then((r) => {
+                        setNoCategoryAccounts(r);
+                        return;
+                    });
+                });
             });
         } else {
+            const selectedAccounts = noCategoriesAccounts.filter((account) => {
+                return account.isActive === true;
+            });
+            const payload = {
+                accounts: selectedAccounts ? selectedAccounts : [],
+                categoryName: categoryName,
+                categoryDescription: categoryDescription,
+            };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             addCategory(payload).then((r) => {
-                loadCategories().then((r) => console.log(r));
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                loadCategories().then((r) => {
+                    getAccountsWithoutCategory().then((r) => {
+                        setNoCategoryAccounts(r);
+                        return;
+                    });
+                });
             });
         }
 
@@ -62,6 +90,31 @@ export const ModalCategory = (props) => {
         setCategoryDescription('');
         setAccounts([]);
         setEditable(null);
+    };
+
+    const removeAccount = (id) => {
+        const newAccounts = activeAccounts.filter((account) => {
+            return account.id !== id;
+        });
+
+        const account = activeAccounts.find((account) => {
+            return account.id === id;
+        });
+
+        noCategoriesAccounts.push(account);
+        setActiveAccounts(newAccounts);
+    };
+
+    const addAccount = (id) => {
+        const toAdd = noCategoriesAccounts.find((account) => {
+            return account.id === id;
+        });
+        const removeAccount = noCategoriesAccounts.filter((account) => {
+            return account.id !== id;
+        });
+
+        activeAccounts.push(toAdd);
+        setNoCategoriesAccounts(removeAccount);
     };
 
     return (
@@ -82,51 +135,31 @@ export const ModalCategory = (props) => {
                     {isEditable ? 'Modify' : 'Create'}
                 </Button>,
             ]}>
-            <h3>Category name</h3>
+            <h3>Name</h3>
             <InputField value={categoryName} onChange={setCategoryNameField} />
-            <h3>Category description</h3>
+            <h3>Description</h3>
             <InputField
                 value={categoryDescription}
                 onChange={setCategoryDescriptionField}
             />
-            <h3>
-                {isEditable ? 'Active Accounts' : 'Accounts without categories'}
-            </h3>
-            {isEditable
-                ? activeAccounts.map((account) => {
-                      return (
-                          <li
-                              key={account.id}
-                              onClick={() =>
-                                  clickOnList(account.id, accounts, setAccounts)
-                              }>
-                              {account.social_type} {account.first_name}{' '}
-                              {account.last_name}{' '}
-                              {account?.isActive ? '(actif)' : ''}
-                          </li>
-                      );
-                  })
-                : ''}
-            {isEditable && activeAccounts.length === 0
-                ? 'There is no account with this category.'
-                : ''}
+            <h3>{isEditable ? 'Accounts' : 'Accounts available'}</h3>
+            {isEditable ? (
+                <AccountCard
+                    key={uuidv4()}
+                    accounts={activeAccounts}
+                    clickOnList={removeAccount}
+                />
+            ) : (
+                ''
+            )}
 
-            <h3>{isEditable && 'Accounts without categories'}</h3>
-            {accounts.map((account) => {
-                return (
-                    <li
-                        key={account.id}
-                        onClick={() =>
-                            clickOnList(account.id, accounts, setAccounts)
-                        }>
-                        {account.social_type} {account.first_name}{' '}
-                        {account.last_name} {account?.isActive ? '(actif)' : ''}
-                    </li>
-                );
-            })}
-            {accounts.length === 0
-                ? 'There is no account without category.'
-                : ''}
+            <h3>{isEditable && 'Without categories'}</h3>
+            <AccountCard
+                key={uuidv4()}
+                accounts={noCategoriesAccounts}
+                clickOnList={isEditable ? addAccount : clickOnList}
+                setAccounts={setAccounts}
+            />
         </Modal>
     );
 };

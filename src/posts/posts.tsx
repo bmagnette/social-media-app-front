@@ -5,15 +5,16 @@ import {
     getCategories,
     postMessage,
 } from '../services/services';
-// import DatePicker from 'react-datepicker';
-// import TimePicker from 'react-time-picker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {clickOnList} from '../shared/helpers/function';
 import {DropdownField} from '../shared/Input/Dropdown';
-import {TextAreaWidget} from './TextAreaWidget';
 import {AccountCard} from '../shared/Account/AccountCard';
 import './Posts.scss';
 import {Button} from '../shared/Input/Button';
+import {TabsInput} from '../shared/Tabs/Tabs/Tabs';
+import {ImageUploader} from './image-uploader/image-uploader';
+import {v4 as uuidv4} from 'uuid';
+import {toast} from 'react-toastify';
 
 export const Posts = () => {
     const [accounts, setAccounts] = useState([]);
@@ -66,7 +67,16 @@ export const Posts = () => {
         if (activeAccounts.length > 0 && message.length > 2) {
             postMessage(payload).then((r) => console.log(r));
         } else {
-            console.log('No account or message');
+            const message =
+                activeAccounts.length === 0
+                    ? 'No account selected'
+                    : 'Write a message';
+            toast.error(message, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         }
     };
 
@@ -85,7 +95,9 @@ export const Posts = () => {
             setDropdownValue(value.value);
             setAccounts(await getAccountsByCategory(category.id));
         }
+        setMessage('');
     };
+
     function findSurrogatePair(point) {
         const offset = point - 0x10000,
             lead = 0xd800 + (offset >> 10),
@@ -111,7 +123,7 @@ export const Posts = () => {
             </div>
             <ul>
                 <AccountCard
-                    key={'123'}
+                    key={uuidv4()}
                     accounts={accounts}
                     clickOnList={clickOnList}
                     setAccounts={setAccounts}
@@ -122,25 +134,32 @@ export const Posts = () => {
                 {accounts.length > 0 && (
                     <form className={'post-form'}>
                         <div className="text-area-wrapper">
-                            <textarea
-                                id={'message'}
-                                value={message}
-                                onChange={handleChange}
-                                placeholder={'Start Typin...'}
+                            <TabsInput
+                                message={message}
+                                handleChange={handleChange}
+                                onEmojiClick={onEmojiClick}
                             />
-                            {/*<DatePicker*/}
-                            {/*    selected={startDate}*/}
-                            {/*    onChange={(date) => setStartDate(date)}*/}
-                            {/*/>*/}
-                            {/*<TimePicker onChange={onChange} value={value} />*/}
-                            <TextAreaWidget onEmojiClick={onEmojiClick} />
-                            <div>{message.length + '/250'}</div>
                         </div>
-                        <Button
-                            className={'large-square-blue'}
-                            title={'Envoyer'}
-                            submit={submit}
-                        />
+                        <ImageUploader />
+                        <div className={'button-wrapper'}>
+                            <Button
+                                className={'large-square-blue'}
+                                title={'Post now'}
+                                submit={submit}
+                            />
+                            <Button
+                                className={'disabled'}
+                                title={'Schedule'}
+                                submit={submit}
+                                disabled={true}
+                            />
+                            <Button
+                                className={'disabled'}
+                                title={'Add to draft'}
+                                submit={submit}
+                                disabled={true}
+                            />
+                        </div>
                     </form>
                 )}
             </div>

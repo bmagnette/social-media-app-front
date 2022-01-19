@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
     closeAccount,
-    connectFacebookAccount,
-    connectLinkedIn,
-    connectTwitterAccount,
     getAccountsWithoutCategory,
     getCategories,
 } from '../services/services';
@@ -12,19 +9,31 @@ import {CategoryList} from './CategoryList/CategoryList';
 import {AccountCard} from '../shared/Account/AccountCard';
 import './accounts.scss';
 import {Button} from '../shared/Input/Button';
+import {ConnectButtons} from './ConnectButtons/ConnectButtons';
+import {v4 as uuidv4} from 'uuid';
 
 export const Accounts = () => {
     const [categories, setCategories] = useState(null);
     const [categoryName, setCategoryName] = useState('');
     const [categoryDescription, setCategoryDescription] = useState('');
 
+    //
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [accounts, setAccounts] = useState([]);
+    const [noCategoryAccounts, setNoCategoryAccounts] = useState([]);
+
+    // For modal
     const [activeAccounts, setActiveAccounts] = useState([]);
+    const [noCategoriesAccounts, setNoCategoriesAccounts] = useState([]);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [tempActiveAccount, setTempActiveAccount] = useState([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [tempNoAccount, setTempNoAccount] = useState([]);
 
     const [isVisible, setVisible] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [isEditable, setEditable] = useState(null);
-    const [noCategoryAccounts, setNoCategoryAccounts] = useState(null);
 
     async function loadCategories() {
         setCategories(await getCategories());
@@ -35,7 +44,9 @@ export const Accounts = () => {
         closeAccount(_id).then((r) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             loadCategories().then((r) => {
-                return;
+                getAccountsWithoutCategory().then((r) => {
+                    setNoCategoryAccounts(r);
+                });
             });
         });
     };
@@ -56,76 +67,83 @@ export const Accounts = () => {
     const showModal = () => {
         setVisible(true);
         getAccountsWithoutCategory().then((r) => {
-            setAccounts(r);
+            setNoCategoriesAccounts(r);
         });
     };
-
     const setterCategory = {
         setEditable,
         setVisible,
         setCategoryName,
         setCategoryDescription,
+        setNoCategoryAccounts,
         setActiveAccounts,
+        setNoCategoriesAccounts,
+        setAccounts,
     };
 
     const modalParams = {
         setCategoryName,
         setCategoryDescription,
+        setNoCategoryAccounts,
+        setActiveAccounts,
         setLoading,
-        accounts,
         categoryName,
         categoryDescription,
         isEditable,
         loadCategories,
+        setNoCategoriesAccounts,
         setVisible,
         setAccounts,
         isVisible,
         isLoading,
         setEditable,
+        noCategoryAccounts,
         activeAccounts,
+        noCategoriesAccounts,
+        setTempActiveAccount,
+        setTempNoAccount,
+        tempNoAccount,
+        tempActiveAccount,
     };
 
     return (
         <div className={'account-page-wrapper'}>
             <div className={'account-wrapper'}>
-                <div className={'connexion-wrapper'}>
-                    <button onClick={connectTwitterAccount}>
-                        Connect Twitter
-                    </button>
-                    <button onClick={connectFacebookAccount}>
-                        Connect Facebook
-                    </button>
-                    <button onClick={connectLinkedIn}>Connect Instagram</button>
-                    <button onClick={connectLinkedIn}>Connect Pinterest</button>
-                    <button onClick={connectLinkedIn}>Connect LinkedIn</button>
-                </div>
+                <ConnectButtons />
                 {categories !== null && (
                     <ul>
                         {categories.map((category) => {
                             return (
-                                <>
+                                <div key={uuidv4()}>
                                     <h3>{category.label}</h3>
                                     <AccountCard
-                                        key={'123'}
+                                        key={uuidv4()}
                                         accounts={category.accounts}
                                         closeConnection={closeConnection}
                                     />
-                                </>
+                                </div>
                             );
                         })}
-                        {noCategoryAccounts !== null && (
+
+                        {noCategoryAccounts.length === 0 ? (
+                            ''
+                        ) : (
                             <>
                                 <h3>Account without category</h3>
                                 <AccountCard
-                                    key={'123'}
+                                    key={uuidv4()}
                                     accounts={noCategoryAccounts}
                                     closeConnection={closeConnection}
                                 />
-                                {categories.length === 0 &&
-                                noCategoryAccounts.length === 0
-                                    ? 'There is no accounts yet.'
-                                    : ''}
                             </>
+                        )}
+                        {categories.length === 0 &&
+                        noCategoryAccounts.length === 0 ? (
+                            <div className="bull-info">
+                                Connect an account to start posting content.
+                            </div>
+                        ) : (
+                            ''
                         )}
                     </ul>
                 )}

@@ -1,7 +1,7 @@
 import axios from 'axios';
+import {toast} from 'react-toastify';
 
 const BACK_END_URL = 'http://localhost:5000';
-
 const HEADER = {'Access-Control-Allow-Origin': '*'};
 
 export const connectLinkedIn = () => {
@@ -11,7 +11,12 @@ export const connectLinkedIn = () => {
             console.log(response);
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -22,7 +27,12 @@ export const connectFacebookAccount = () => {
             console.log(response);
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -33,7 +43,12 @@ export const connectTwitterAccount = () => {
             console.log(response);
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -46,7 +61,12 @@ export const getAccounts = () => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -59,7 +79,12 @@ export const closeAccount = (_id) => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -72,7 +97,12 @@ export const closeCategory = (_id) => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 export const getCategories = () => {
@@ -84,7 +114,12 @@ export const getCategories = () => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -97,7 +132,12 @@ export const getCategory = (_id) => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -110,7 +150,12 @@ export const editCategory = (_id, payload) => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -123,7 +168,12 @@ export const addCategory = (payload) => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -136,7 +186,12 @@ export const getAccountsWithoutCategory = () => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -149,7 +204,30 @@ export const getAccountsByCategory = (_id) => {
             return response['data']['content'];
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        });
+};
+
+export const getPostBatch = () => {
+    return axios
+        .get(BACK_END_URL + '/batchs', {
+            headers: HEADER,
+        })
+        .then(function (response) {
+            return response['data']['content'];
+        })
+        .catch(function (error) {
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };
 
@@ -158,8 +236,19 @@ export const postMessage = (payload) => {
         .post(BACK_END_URL + '/batch', payload)
         .then(function (response) {
             console.log(response);
+            toast.info('Message sent !', {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         })
         .catch(function (error) {
-            console.log(error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         });
 };

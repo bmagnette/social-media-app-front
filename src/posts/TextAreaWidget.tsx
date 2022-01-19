@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import './TextAreaWidget.scss';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import {Emoji} from '../asset/images/emoticone.png';
+import Emoji from '../asset/images/smile.png';
 import {CloudUploadOutlined} from '@ant-design/icons';
 
 export const TextAreaWidget = (props) => {
@@ -19,17 +19,28 @@ export const TextAreaWidget = (props) => {
 
     return (
         <div className={'text-area-widget'}>
-            <div className={'widget'} onClick={ChangeEmoji}>
-                <img src={Emoji} height={40} width={40} alt={'Emoji'} />
-                <div
-                    className={
-                        emojiSelected ? 'widget-display' : 'widget-hide'
-                    }>
-                    <Picker onEmojiClick={props.onEmojiClick} />
+            <div className="left-widget">
+                <div className={'widget'}>
+                    <img
+                        onClick={ChangeEmoji}
+                        src={Emoji}
+                        height={25}
+                        width={25}
+                        alt={'Emoji'}
+                    />
+                    <div
+                        className={
+                            emojiSelected ? 'widget-display' : 'widget-hide'
+                        }>
+                        <Picker onEmojiClick={props.onEmojiClick} />
+                    </div>
+                </div>
+                <div className={'widget disabled-button'} onClick={showLoader}>
+                    <CloudUploadOutlined />
                 </div>
             </div>
-            <div className={'widget'} onClick={showLoader}>
-                <CloudUploadOutlined />
+            <div className={'widget'}>
+                <div>{props.message + '/280'}</div>
             </div>
         </div>
     );

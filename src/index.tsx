@@ -12,7 +12,6 @@ import {Analytics} from './analytics/analytics';
 import {Settings} from './settings/settings';
 import {Login} from './auth/login/Login';
 import {RegisterForm} from './auth/register/Register';
-
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>

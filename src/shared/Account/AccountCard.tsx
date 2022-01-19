@@ -1,12 +1,23 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import LinkedIn from '../../asset/images/linkedin.png';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import Twitter from '../../asset/images/twitter-icon.png';
 import React from 'react';
 import {CloseCircleFilled} from '@ant-design/icons';
 import './AccountCard.scss';
 
 export const AccountCard = (props) => {
     const isClickOnlist = props.clickOnList ? 'cursor' : '';
+    const selectPicture = (socialMedia: string) => {
+        switch (socialMedia) {
+            case 'LINKEDIN':
+                return LinkedIn;
+            case 'TWITTER':
+                return Twitter;
+        }
+    };
     return (
         <div className="accounts-card-wrapper">
             {props.accounts.map((account) => {
@@ -30,8 +41,12 @@ export const AccountCard = (props) => {
                                       )
                                 : null
                         }>
-                        <img src={LinkedIn} alt={account.social_type} />
+                        <img
+                            src={selectPicture(account.social_type)}
+                            alt={account.social_type}
+                        />
                         <br />
+                        {account.account_name}
                         {account.first_name} {account.last_name}{' '}
                         {props.closeConnection ? (
                             <CloseCircleFilled
