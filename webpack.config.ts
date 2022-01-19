@@ -5,7 +5,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 const webpackConfig = (): Configuration => ({
-    entry: './src/index.tsx',
+    entry: './src/index.js',
     ...(process.env.production || !process.env.development
         ? {}
         : {devtool: 'eval-source-map'}),
@@ -21,6 +21,13 @@ const webpackConfig = (): Configuration => ({
     module: {
         rules: [
             {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                },
+            },
+            {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 options: {
@@ -34,13 +41,17 @@ const webpackConfig = (): Configuration => ({
                     'style-loader',
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true, importLoaders: 1, modules: false },
+                        options: {
+                            sourceMap: true,
+                            importLoaders: 1,
+                            modules: false,
+                        },
                     },
-                    { loader: 'postcss-loader', options: { sourceMap: true } },
-                    { loader: 'sass-loader', options: { sourceMap: true } },
+                    {loader: 'postcss-loader', options: {sourceMap: true}},
+                    {loader: 'sass-loader', options: {sourceMap: true}},
                 ],
             },
-            { test: /\.(?:ico|gif|png|jpg|jpeg)$/i, type: 'asset/resource' },
+            {test: /\.(?:ico|gif|png|jpg|jpeg)$/i, type: 'asset/resource'},
         ],
     },
     devServer: {
