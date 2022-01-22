@@ -94,10 +94,13 @@ export const Calendar = () => {
             post.posts.map((batch) => {
                 accounts.push(batch.account);
             });
+
+            const summary =
+                post?.posts.length === 0 ? '' : post?.posts[0].message;
             const event = {
                 startAt: postedDate.toISOString(),
                 endAt: postedDate.toISOString(),
-                summary: post.posts[0].message,
+                summary: summary,
                 color: 'blue',
                 accounts: accounts,
                 post: post,

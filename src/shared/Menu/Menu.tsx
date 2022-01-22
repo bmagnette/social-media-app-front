@@ -8,7 +8,7 @@ export const Menu = () => {
         <div className={'menu-wrapper'}>
             <ul>
                 <Link to="/accounts" className={'menu-logo'}>
-                    <li>Social Cron</li>
+                    <li>CronShot</li>
                 </Link>
             </ul>
             <ul>

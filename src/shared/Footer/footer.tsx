@@ -5,7 +5,7 @@ export const Footer = () => {
     return (
         <div className={'footer-wrapper'}>
             <ul>
-                <li>Social Cron</li>
+                <li>CronShot</li>
                 <li>
                     <ul>
                         <li>Social</li>

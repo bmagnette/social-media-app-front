@@ -16,7 +16,20 @@ const webpackConfig = (): Configuration => ({
     },
     output: {
         path: path.join(__dirname, '/build'),
-        filename: 'build.js',
+        filename: '[name].[contenthash].js',
+    },
+    optimization: {
+        moduleIds: 'deterministic',
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        },
     },
     module: {
         rules: [
