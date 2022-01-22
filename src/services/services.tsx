@@ -3,7 +3,7 @@ import {toast} from 'react-toastify';
 
 const BACK_END_URL = process.env.REACT_APP_BACK_END;
 const HEADER = {'Access-Control-Allow-Origin': '*'};
-console.log(BACK_END_URL);
+
 export const connectLinkedIn = () => {
     return axios
         .post(BACK_END_URL + '/linkedin/authorize', HEADER, {})
