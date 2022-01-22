@@ -62,7 +62,7 @@ export const AccountCard = (props) => {
             })}
             {props.accounts.length === 0 ? (
                 <div className="bull-info">
-                    There is no account for this category
+                    Connect an account to start posting content.
                 </div>
             ) : (
                 ''

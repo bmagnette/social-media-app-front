@@ -12,6 +12,7 @@ import {Analytics} from './analytics/analytics';
 import {Settings} from './settings/settings';
 import {Login} from './auth/login/Login';
 import {RegisterForm} from './auth/register/Register';
+import {ToastContainer} from 'react-toastify';
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
@@ -46,6 +47,7 @@ ReactDOM.render(
                 />
             </Routes>
         </BrowserRouter>
+        <ToastContainer />
     </React.StrictMode>,
     document.getElementById('root'),
 );

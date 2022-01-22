@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Register.scss';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import validator from 'validator';
+import {registerUser} from '../../services/services';
+import {toast} from 'react-toastify';
 
 export const RegisterForm = () => {
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const navigate = useNavigate();
     return (
         <div className={'register-wrapper'}>
             <div id="back">
@@ -11,38 +17,91 @@ export const RegisterForm = () => {
 
             <div id="slideBox">
                 <div className="topLayer">
-                    <div className="right">
-                        <div className="content">
-                            <h2>Register</h2>
-                            <form>
-                                <div className="form-group">
-                                    <label
-                                        htmlFor="username"
-                                        className="form-label">
-                                        Email
-                                    </label>
-                                    <input type="text" />
-                                </div>
-                                <div className="form-group">
-                                    <label
-                                        htmlFor="username"
-                                        className="form-label">
-                                        Password
-                                    </label>
-                                    <input type="text" />
-                                </div>
+                    <div className="content">
+                        <h2>Register</h2>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                if (!validator.isEmail(e.target[0].value)) {
+                                    setEmailError('Enter valid Email!');
+                                    return;
+                                }
+
+                                if (e.target[1].value.length <= 3) {
+                                    setPasswordError('Password must be longer');
+                                    return;
+                                }
+                                const payload = {
+                                    email: e.target[0].value,
+                                    password: e.target[1].value,
+                                };
+                                registerUser(payload)
+                                    .then(function (response) {
+                                        toast.info(response.data.message, {
+                                            position: 'top-right',
+                                            autoClose: 5000,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                        });
+                                        navigate('/login');
+                                    })
+                                    .catch(function (error) {
+                                        toast.error(
+                                            error.response.data.message,
+                                            {
+                                                position: 'top-right',
+                                                autoClose: 5000,
+                                                closeOnClick: true,
+                                                pauseOnHover: true,
+                                            },
+                                        );
+                                    });
+                            }}>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="username"
+                                    className="form-label">
+                                    Email
+                                </label>
+                                <input required name="email" type="email" />
+                                <span
+                                    style={{
+                                        fontWeight: 'bold',
+                                        color: 'red',
+                                    }}>
+                                    {emailError}
+                                </span>
+                            </div>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="password"
+                                    className="form-label">
+                                    Password
+                                </label>
+                                <input
+                                    required
+                                    name="password"
+                                    type="password"
+                                />
+                                <span
+                                    style={{
+                                        fontWeight: 'bold',
+                                        color: 'red',
+                                    }}>
+                                    {passwordError}
+                                </span>
+                            </div>
+                            <div className={'wrapper-button'}>
                                 <Link to={'/login'}>
                                     <button id="login" className="off">
                                         Return
                                     </button>
                                 </Link>
-                                <Link to={'/'}>
-                                    <button id="goRight" type="submit">
-                                        Sign Up
-                                    </button>
-                                </Link>
-                            </form>
-                        </div>
+                                <button id="goRight" type="submit">
+                                    Sign Up
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

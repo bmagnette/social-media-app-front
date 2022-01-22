@@ -2,7 +2,6 @@ import React from 'react';
 import './styles.scss';
 import {Menu} from './shared/Menu/Menu';
 import {Outlet} from 'react-router-dom';
-import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
@@ -12,7 +11,6 @@ const App: React.FC = () => {
                 <Menu />
                 <Outlet />
             </div>
-            <ToastContainer />
         </div>
     );
 };

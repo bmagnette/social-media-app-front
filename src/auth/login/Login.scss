@@ -23,9 +23,6 @@
     .topLayer {
         width: 200%;
         height: 100%;
-        position: relative;
-        left: 0;
-        left: -100%;
     }
 
     .left {
@@ -36,28 +33,24 @@
         position: absolute;
     }
 
-    .right {
-        width: 50%;
-        height: 100%;
-        background: #f9f9f9;
-        right: 0;
-        position: absolute;
-    }
-
     .content {
-        width: 250px;
-        margin: 0 auto;
+        min-width: 250px;
         top: 30%;
         position: absolute;
         left: 50%;
-        margin-left: -125px;
-    }
+        margin: 0 auto 0 -250px;
 
-    .content h2 {
-        color: #03a9f4;
-        font-weight: 300;
-        font-size: 35px;
-        text-align: center;
+        h2 {
+            color: #03a9f4;
+            font-weight: 300;
+            font-size: 35px;
+            text-align: center;
+        }
+
+        .wrapper-button{
+            margin-top: 25px;
+            text-align: center;
+        }
     }
 
     button {
@@ -99,6 +92,7 @@
         background: #363a3d;
     }
     input {
+        min-width: 250px;
         background: transparent;
         border: 0;
         outline: 0;
@@ -106,6 +100,17 @@
         font-size: 14px;
         color: #959595;
         padding: 8px 0;
-        margin-top: 20px;
     }
+}
+
+
+.form-group{
+    display: table;
+}
+.form-label{
+    margin-top: 20px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    min-width: 200px;
 }

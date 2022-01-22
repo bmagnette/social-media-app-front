@@ -1,8 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Login.scss';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import validator from 'validator';
+import {loginApplication} from '../../services/services';
+import {toast} from 'react-toastify';
 
 export const Login = () => {
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const navigate = useNavigate();
+
     return (
         <div className={'login-wrapper'}>
             <div id="back">
@@ -11,38 +18,87 @@ export const Login = () => {
 
             <div id="slideBox">
                 <div className="topLayer">
-                    <div className="right">
-                        <div className="content">
-                            <h2>Login</h2>
-                            <form>
-                                <div className="form-group">
-                                    <label
-                                        htmlFor="username"
-                                        className="form-label">
-                                        Email
-                                    </label>
-                                    <input type="text" />
-                                </div>
-                                <div className="form-group">
-                                    <label
-                                        htmlFor="password"
-                                        className="form-label">
-                                        Password
-                                    </label>
-                                    <input type="text" />
-                                </div>
+                    <div className="content">
+                        <h2>Login</h2>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                if (!validator.isEmail(e.target[0].value)) {
+                                    setEmailError('Enter valid Email!');
+                                    return;
+                                }
+
+                                if (e.target[1].value.length <= 3) {
+                                    setPasswordError('Password must be longer');
+                                    return;
+                                }
+                                const payload = {
+                                    username: e.target[0].value,
+                                    password: e.target[1].value,
+                                };
+
+                                loginApplication(payload)
+                                    .then((response) => {
+                                        localStorage.setItem(
+                                            'TOKEN',
+                                            response.data.user.token,
+                                        );
+                                        navigate('/accounts');
+                                    })
+                                    .catch((error) => {
+                                        console.log(error);
+                                        toast.error(
+                                            error.response.data.message,
+                                            {
+                                                position: 'top-right',
+                                                autoClose: 5000,
+                                                closeOnClick: true,
+                                                pauseOnHover: true,
+                                            },
+                                        );
+                                    });
+                            }}>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="username"
+                                    className="form-label">
+                                    Email
+                                </label>
+                                <input type="text" />
+                                <span
+                                    style={{
+                                        fontWeight: 'bold',
+                                        color: 'red',
+                                    }}>
+                                    {emailError}
+                                </span>{' '}
+                            </div>
+                            <div className="form-group">
+                                <label
+                                    htmlFor="password"
+                                    className="form-label">
+                                    Password
+                                </label>
+                                <input type="password" />
+                                <span
+                                    style={{
+                                        fontWeight: 'bold',
+                                        color: 'red',
+                                    }}>
+                                    {passwordError}
+                                </span>
+                            </div>
+                            <div className={'wrapper-button'}>
                                 <Link to={'/register'}>
                                     <button id="goRight" className="off">
                                         Sign Up
                                     </button>
                                 </Link>
-                                <Link to={'/'}>
-                                    <button id="login" type="submit">
-                                        Login
-                                    </button>
-                                </Link>
-                            </form>
-                        </div>
+                                <button id="login" type="submit">
+                                    Login
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
