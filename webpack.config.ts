@@ -3,6 +3,7 @@ import {Configuration, DefinePlugin} from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import dotenv from 'dotenv'
 
 const webpackConfig = (): Configuration => ({
     entry: './src/index.tsx',
@@ -78,7 +79,7 @@ const webpackConfig = (): Configuration => ({
             template: './public/index.html',
         }),
         new DefinePlugin({
-            'process.env': process.env.production || !process.env.development,
+            'process.env': JSON.stringify(dotenv.config().parsed),
         }),
         new ForkTsCheckerWebpackPlugin({
             eslint: {

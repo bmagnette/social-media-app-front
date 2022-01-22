@@ -52,6 +52,7 @@
         "antd": "^4.18.2",
         "axios": "^0.24.0",
         "css-loader": "^6.4.0",
+        "dotenv": "^14.2.0",
         "emoji-picker-react": "^3.5.0",
         "eslint": "^7.22.0",
         "eslint-config-prettier": "^8.1.0",
