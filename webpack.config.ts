@@ -80,6 +80,9 @@ const webpackConfig = (): Configuration => ({
         }),
         new DefinePlugin({
             'process.env': JSON.stringify(dotenv.config().parsed),
+            'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+            'process.env.PAPERTRAIL_API_TOKEN': JSON.stringify(process.env.PAPERTRAIL_API_TOKEN),
         }),
         new ForkTsCheckerWebpackPlugin({
             eslint: {
