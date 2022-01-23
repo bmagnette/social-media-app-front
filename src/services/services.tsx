@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {toast} from 'react-toastify';
 import {privateHeader} from '../shared/tools/headers';
-import history from '../shared/history';
+import {useNavigate} from 'react-router-dom';
 
 const BACK_END_URL = process.env.REACT_APP_API_URL;
-console.log(process.env);
-export const connectLinkedIn = () => {
+
+export const ConnectLinkedIn = () => {
+    const navigate = useNavigate();
     const token = localStorage.getItem('TOKEN');
     return axios
         .post(BACK_END_URL + '/linkedin/authorize', privateHeader(token), {})
@@ -14,7 +15,7 @@ export const connectLinkedIn = () => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -25,8 +26,9 @@ export const connectLinkedIn = () => {
         });
 };
 
-export const connectFacebookAccount = () => {
+export const ConnectFacebookAccount = () => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .post(
@@ -39,7 +41,7 @@ export const connectFacebookAccount = () => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -50,8 +52,9 @@ export const connectFacebookAccount = () => {
         });
 };
 
-export const connectTwitterAccount = () => {
+export const ConnectTwitterAccount = () => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .post(
@@ -64,7 +67,7 @@ export const connectTwitterAccount = () => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -75,8 +78,9 @@ export const connectTwitterAccount = () => {
         });
 };
 
-export const getAccounts = () => {
+export const GetAccounts = () => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .get(BACK_END_URL + '/accounts', {
@@ -87,7 +91,7 @@ export const getAccounts = () => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -98,8 +102,9 @@ export const getAccounts = () => {
         });
 };
 
-export const closeAccount = (_id) => {
+export const CloseAccount = (_id) => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .delete(BACK_END_URL + '/account/' + _id, {
@@ -110,7 +115,7 @@ export const closeAccount = (_id) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -121,8 +126,9 @@ export const closeAccount = (_id) => {
         });
 };
 
-export const closeCategory = (_id) => {
+export const CloseCategory = (_id) => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .delete(BACK_END_URL + '/category/' + _id, {
@@ -133,7 +139,7 @@ export const closeCategory = (_id) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -143,8 +149,9 @@ export const closeCategory = (_id) => {
             });
         });
 };
-export const getCategories = () => {
+export const GetCategories = () => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .get(BACK_END_URL + '/categories', {
@@ -155,7 +162,7 @@ export const getCategories = () => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -166,8 +173,9 @@ export const getCategories = () => {
         });
 };
 
-export const getCategory = (_id) => {
+export const GetCategory = (_id) => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .get(BACK_END_URL + '/category/' + _id, {
@@ -178,7 +186,7 @@ export const getCategory = (_id) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -189,8 +197,9 @@ export const getCategory = (_id) => {
         });
 };
 
-export const editCategory = (_id, payload) => {
+export const EditCategory = (_id, payload) => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .put(BACK_END_URL + '/category/' + _id, payload, {
@@ -201,7 +210,7 @@ export const editCategory = (_id, payload) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -212,8 +221,9 @@ export const editCategory = (_id, payload) => {
         });
 };
 
-export const addCategory = (payload) => {
+export const AddCategory = (payload) => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .post(BACK_END_URL + '/category', payload, {
@@ -224,7 +234,7 @@ export const addCategory = (payload) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -235,8 +245,9 @@ export const addCategory = (payload) => {
         });
 };
 
-export const getAccountsWithoutCategory = () => {
+export const GetAccountsWithoutCategory = () => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .get(BACK_END_URL + '/accounts/orphan', {
@@ -247,7 +258,7 @@ export const getAccountsWithoutCategory = () => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -258,8 +269,9 @@ export const getAccountsWithoutCategory = () => {
         });
 };
 
-export const getAccountsByCategory = (_id) => {
+export const GetAccountsByCategory = (_id) => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .get(BACK_END_URL + '/category/' + _id + '/accounts', {
@@ -270,7 +282,7 @@ export const getAccountsByCategory = (_id) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -281,8 +293,9 @@ export const getAccountsByCategory = (_id) => {
         });
 };
 
-export const getPostBatch = () => {
+export const GetPostBatch = () => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .get(BACK_END_URL + '/batchs', {
@@ -293,7 +306,7 @@ export const getPostBatch = () => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -304,8 +317,9 @@ export const getPostBatch = () => {
         });
 };
 
-export const postMessage = (payload) => {
+export const PostMessage = (payload) => {
     const token = localStorage.getItem('TOKEN');
+    const navigate = useNavigate();
 
     return axios
         .post(BACK_END_URL + '/batch', privateHeader(token), payload)
@@ -320,7 +334,7 @@ export const postMessage = (payload) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                history.push('/login');
+                navigate('/login');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',

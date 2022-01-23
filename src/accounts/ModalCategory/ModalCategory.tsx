@@ -2,9 +2,9 @@ import {Button, Modal} from 'antd';
 import {InputField} from '../../shared/Input/input';
 import React from 'react';
 import {
-    addCategory,
-    editCategory,
-    getAccountsWithoutCategory,
+    AddCategory,
+    EditCategory,
+    GetAccountsWithoutCategory,
 } from '../../services/services';
 import {AccountCard} from '../../shared/Account/AccountCard';
 import {v4 as uuidv4} from 'uuid';
@@ -50,10 +50,10 @@ export const ModalCategory = (props) => {
                 categoryDescription: categoryDescription,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            editCategory(isEditable, payload).then((r) => {
+            EditCategory(isEditable, payload).then((r) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 loadCategories().then((r) => {
-                    getAccountsWithoutCategory().then((r) => {
+                    GetAccountsWithoutCategory().then((r) => {
                         setNoCategoryAccounts(r);
                         return;
                     });
@@ -69,10 +69,10 @@ export const ModalCategory = (props) => {
                 categoryDescription: categoryDescription,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            addCategory(payload).then((r) => {
+            AddCategory(payload).then((r) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 loadCategories().then((r) => {
-                    getAccountsWithoutCategory().then((r) => {
+                    GetAccountsWithoutCategory().then((r) => {
                         setNoCategoryAccounts(r);
                         return;
                     });

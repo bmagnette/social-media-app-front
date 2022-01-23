@@ -1,7 +1,7 @@
 import Kalend, {CalendarView} from 'kalend';
 import 'kalend/dist/styles/index.css'; // import styles
 import React, {useEffect, useState} from 'react';
-import {getCategories, getPostBatch} from '../services/services';
+import {GetCategories, GetPostBatch} from '../services/services';
 import {DropdownField} from '../shared/Input/Dropdown';
 import {Event} from './calendar.interfaces';
 import './calendar.scss';
@@ -20,13 +20,13 @@ export const Calendar = () => {
     const [post, setPost] = useState(null);
 
     async function loadEvents() {
-        const newPosts = await getPostBatch();
+        const newPosts = await GetPostBatch();
         setPosts(newPosts);
         setDisplayedPosts(newPosts);
     }
 
     async function loadCategories() {
-        const categories = await getCategories();
+        const categories = await GetCategories();
         setCategories(categories);
 
         const catego = categories.map((category: {label: string}) => {

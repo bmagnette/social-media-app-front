@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {
-    getAccountsByCategory,
-    getAccountsWithoutCategory,
-    getCategories,
-    postMessage,
+    GetAccountsByCategory,
+    GetAccountsWithoutCategory,
+    GetCategories,
+    PostMessage,
 } from '../services/services';
 import 'react-datepicker/dist/react-datepicker.css';
 import {clickOnList} from '../shared/helpers/function';
@@ -31,7 +31,7 @@ export const Posts = () => {
     const [category, setCategory] = useState(null);
 
     async function loadCategories() {
-        const categories = await getCategories();
+        const categories = await GetCategories();
         setCategories(categories);
 
         const catego = categories.map((category: {label: string}) => {
@@ -44,7 +44,7 @@ export const Posts = () => {
     }
 
     async function loadAccounts() {
-        const accounts = await getAccountsWithoutCategory();
+        const accounts = await GetAccountsWithoutCategory();
         setAccounts(accounts);
     }
 
@@ -65,7 +65,7 @@ export const Posts = () => {
         };
 
         if (activeAccounts.length > 0 && message.length > 2) {
-            postMessage(payload).then((r) => console.log(r));
+            PostMessage(payload).then((r) => console.log(r));
         } else {
             const message =
                 activeAccounts.length === 0
@@ -86,14 +86,14 @@ export const Posts = () => {
 
     const onDropdownChange = async (value) => {
         if (value.label === 'Without category') {
-            setAccounts(await getAccountsWithoutCategory());
+            setAccounts(await GetAccountsWithoutCategory());
         } else {
             const category = categories.find(
                 (category) => category.label === value.label,
             );
             setCategory(category.id);
             setDropdownValue(value.value);
-            setAccounts(await getAccountsByCategory(category.id));
+            setAccounts(await GetAccountsByCategory(category.id));
         }
         setMessage('');
     };

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {
-    closeAccount,
-    getAccountsWithoutCategory,
-    getCategories,
+    CloseAccount,
+    GetAccountsWithoutCategory,
+    GetCategories,
 } from '../services/services';
 import {ModalCategory} from './ModalCategory/ModalCategory';
 import {CategoryList} from './CategoryList/CategoryList';
@@ -36,15 +36,15 @@ export const Accounts = () => {
     const [isEditable, setEditable] = useState(null);
 
     async function loadCategories() {
-        setCategories(await getCategories());
+        setCategories(await GetCategories());
     }
 
     const closeConnection = (_id) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        closeAccount(_id).then((r) => {
+        CloseAccount(_id).then((r) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             loadCategories().then((r) => {
-                getAccountsWithoutCategory().then((r) => {
+                GetAccountsWithoutCategory().then((r) => {
                     setNoCategoryAccounts(r);
                 });
             });
@@ -55,7 +55,7 @@ export const Accounts = () => {
         if (!categories) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             loadCategories().then((r) => {
-                getAccountsWithoutCategory().then((r) => {
+                GetAccountsWithoutCategory().then((r) => {
                     setNoCategoryAccounts(r);
                     return;
                 });
@@ -66,7 +66,7 @@ export const Accounts = () => {
 
     const showModal = () => {
         setVisible(true);
-        getAccountsWithoutCategory().then((r) => {
+        GetAccountsWithoutCategory().then((r) => {
             setNoCategoriesAccounts(r);
         });
     };

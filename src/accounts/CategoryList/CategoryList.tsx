@@ -1,19 +1,19 @@
 import React from 'react';
 import {
-    closeCategory,
-    getAccountsByCategory,
-    getAccountsWithoutCategory,
-    getCategory,
+    CloseCategory,
+    GetAccountsByCategory,
+    GetAccountsWithoutCategory,
+    GetCategory,
 } from '../../services/services';
 import {CloseCircleFilled, FormOutlined} from '@ant-design/icons';
 
 export const CategoryList = (props) => {
     const closeConnection = (_id) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        closeCategory(_id).then((r) => {
+        CloseCategory(_id).then((r) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             props.loadCategories().then((r) => {
-                getAccountsWithoutCategory().then((r) => {
+                GetAccountsWithoutCategory().then((r) => {
                     props.setter.setNoCategoryAccounts(r);
                 });
             });
@@ -21,15 +21,15 @@ export const CategoryList = (props) => {
     };
 
     const editCategoryModal = (_id) => {
-        getCategory(_id).then((r) => {
+        GetCategory(_id).then((r) => {
             props.setter.setEditable(_id);
             props.setter.setVisible(true);
             props.setter.setCategoryName(r.label);
             props.setter.setCategoryDescription(r.description);
-            getAccountsByCategory(_id).then((r) =>
+            GetAccountsByCategory(_id).then((r) =>
                 props.setter.setActiveAccounts(r),
             );
-            getAccountsWithoutCategory().then((r) => {
+            GetAccountsWithoutCategory().then((r) => {
                 props.setter.setNoCategoryAccounts(r);
                 props.setter.setNoCategoriesAccounts(r);
             });
