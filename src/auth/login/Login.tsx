@@ -4,11 +4,13 @@ import {Link, useNavigate} from 'react-router-dom';
 import validator from 'validator';
 import {loginApplication} from '../../services/services';
 import {toast} from 'react-toastify';
+import {useAuth} from '../../index';
 
 export const Login = () => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
+    const auth = useAuth();
 
     return (
         <div className={'login-wrapper'}>
@@ -39,11 +41,13 @@ export const Login = () => {
 
                                 loginApplication(payload)
                                     .then((response) => {
-                                        localStorage.setItem(
-                                            'TOKEN',
-                                            response.data.user.token,
-                                        );
-                                        navigate('/accounts');
+                                        auth.signin(e.target[0].value, () => {
+                                            navigate('/accounts');
+                                            localStorage.setItem(
+                                                'TOKEN',
+                                                response.data.user.token,
+                                            );
+                                        });
                                     })
                                     .catch((error) => {
                                         console.log(error);

@@ -1,9 +1,13 @@
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import React from 'react';
 import './Menu.scss';
 import {DownOutlined} from '@ant-design/icons';
+import {useAuth} from '../../index';
 
 export const Menu = () => {
+    const navigate = useNavigate();
+    const auth = useAuth();
+
     return (
         <div className={'menu-wrapper'}>
             <ul>
@@ -44,9 +48,12 @@ export const Menu = () => {
                             {/*<Link to="/invoices">*/}
                             {/*    <li>Billing</li>*/}
                             {/*</Link>*/}
-                            <Link to="/login">
-                                <li>Log Out</li>
-                            </Link>
+                            <li
+                                onClick={() =>
+                                    auth.signout(() => navigate('/'))
+                                }>
+                                Log Out
+                            </li>
                         </ul>
                     </li>
                 </ul>
