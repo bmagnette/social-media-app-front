@@ -4,7 +4,7 @@ import {privateHeader} from '../shared/tools/headers';
 import history from '../shared/history';
 
 const BACK_END_URL = process.env.REACT_APP_API_URL;
-console.log(BACK_END_URL);
+console.log(process.env);
 export const connectLinkedIn = () => {
     const token = localStorage.getItem('TOKEN');
     return axios
