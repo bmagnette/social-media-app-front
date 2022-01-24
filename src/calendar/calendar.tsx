@@ -6,6 +6,7 @@ import {DropdownField} from '../shared/Input/Dropdown';
 import {Event} from './calendar.interfaces';
 import './calendar.scss';
 import {ModalAntd} from '../shared/Modal/modal-antd';
+import {useNavigate} from 'react-router-dom';
 
 export const Calendar = () => {
     const [posts, setPosts] = useState([]);
@@ -18,15 +19,15 @@ export const Calendar = () => {
     const [category, setCategory] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
     const [post, setPost] = useState(null);
-
+    const navigate = useNavigate();
     async function loadEvents() {
-        const newPosts = await GetPostBatch();
+        const newPosts = await GetPostBatch(navigate);
         setPosts(newPosts);
         setDisplayedPosts(newPosts);
     }
 
     async function loadCategories() {
-        const categories = await GetCategories();
+        const categories = await GetCategories(navigate);
         setCategories(categories);
 
         const catego = categories.map((category: {label: string}) => {
@@ -42,7 +43,8 @@ export const Calendar = () => {
     useEffect(() => {
         loadEvents();
         loadCategories();
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigate]);
 
     const onEventClick = (data: Event) => {
         setPost(data);

@@ -1,0 +1,115 @@
+@import '../styles';
+
+.billing-wrapper {
+    .billing-title {
+        width: 33%;
+
+        h4 {
+            color: $blue-hover;
+        }
+    }
+
+    .billing-section {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 40px;
+        padding-bottom: 40px;
+
+        .billing-content {
+            width: 66%;
+
+            table {
+                background-color: transparent;
+                width: 100%;
+                max-width: 100%;
+                margin-bottom: 20px;
+                border-collapse: collapse;
+                border-spacing: 0;
+                font-size: 14px;
+                line-height: 1.42857;
+                color: #3f3f44;
+                font-family: salesforce-sans, 'Helvetica Neue', helvetica, arial,
+                    sans-serif;
+
+                tr {
+                    &:first-of-type td {
+                        border-top: none;
+                    }
+                }
+
+                td {
+                    padding: 8px;
+                    line-height: 1.42857;
+                    vertical-align: top;
+                    width: 40%;
+                    border-top: 1px solid #e7ebf3;
+
+                    &:first-of-type {
+                        padding-left: 0;
+                    }
+                }
+            }
+
+            .stripe-card {
+                background-color: $background-grey;
+                height: 75px;
+                border-radius: 10px;
+                box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+                text-align: center;
+                display: flex;
+                justify-content: space-between;
+                padding: 15px;
+                line-height: 40px;
+
+              button{
+                line-height: 35px;
+                  margin: 5px;
+              }
+
+            }
+        }
+    }
+
+    .invoice-section {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 40px;
+        padding-bottom: 40px;
+
+        .billing-content {
+            width: 66%;
+
+            table {
+                background-color: transparent;
+                width: 100%;
+                max-width: 100%;
+                margin-bottom: 20px;
+                border-collapse: collapse;
+                border-spacing: 0;
+                font-size: 14px;
+                line-height: 1.42857;
+                color: #3f3f44;
+                font-family: salesforce-sans, 'Helvetica Neue', helvetica, arial,
+                    sans-serif;
+
+                tr {
+                    &:first-of-type td {
+                        border-top: none;
+                    }
+                }
+
+                td {
+                    padding: 8px;
+                    line-height: 1.42857;
+                    vertical-align: top;
+                    width: 40%;
+                    border-top: 1px solid #e7ebf3;
+
+                    &:first-of-type {
+                        padding-left: 0;
+                    }
+                }
+            }
+        }
+    }
+}

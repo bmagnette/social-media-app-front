@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import {
     BrowserRouter,
+    Navigate,
+    Outlet,
     Route,
     Routes,
     useLocation,
-    Outlet,
-    Navigate,
 } from 'react-router-dom';
 import {Posts} from './posts/posts';
 import {Accounts} from './accounts/accounts';
@@ -20,6 +20,7 @@ import {Settings} from './settings/settings';
 import {Login} from './auth/login/Login';
 import {RegisterForm} from './auth/register/Register';
 import {ToastContainer} from 'react-toastify';
+import {Billing} from './billing/billing';
 
 interface AuthContextType {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,6 +93,7 @@ ReactDOM.render(
 
                     <Route element={<App />}>
                         <Route element={<RequireAuth />}>
+                            <Route path="/billing" element={<Billing />} />
                             <Route path="/drafts" element={<Drafts />} />
                             <Route path="/accounts" element={<Accounts />} />
                             <Route path="/analytics" element={<Analytics />} />

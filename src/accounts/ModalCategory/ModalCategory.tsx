@@ -9,6 +9,7 @@ import {
 import {AccountCard} from '../../shared/Account/AccountCard';
 import {v4 as uuidv4} from 'uuid';
 import {clickOnList} from '../../shared/helpers/function';
+import {useNavigate} from 'react-router-dom';
 
 export const ModalCategory = (props) => {
     const {
@@ -31,7 +32,7 @@ export const ModalCategory = (props) => {
         noCategoriesAccounts,
         setNoCategoriesAccounts,
     } = props.modalParams;
-
+    const navigate = useNavigate();
     const setCategoryNameField = (e) => {
         setCategoryName(e.target.value);
     };
@@ -50,10 +51,10 @@ export const ModalCategory = (props) => {
                 categoryDescription: categoryDescription,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            EditCategory(isEditable, payload).then((r) => {
+            EditCategory(navigate, isEditable, payload).then((r) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 loadCategories().then((r) => {
-                    GetAccountsWithoutCategory().then((r) => {
+                    GetAccountsWithoutCategory(navigate).then((r) => {
                         setNoCategoryAccounts(r);
                         return;
                     });
@@ -69,10 +70,10 @@ export const ModalCategory = (props) => {
                 categoryDescription: categoryDescription,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            AddCategory(payload).then((r) => {
+            AddCategory(navigate, payload).then((r) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 loadCategories().then((r) => {
-                    GetAccountsWithoutCategory().then((r) => {
+                    GetAccountsWithoutCategory(navigate).then((r) => {
                         setNoCategoryAccounts(r);
                         return;
                     });

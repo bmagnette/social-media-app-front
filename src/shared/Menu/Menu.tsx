@@ -45,9 +45,9 @@ export const Menu = () => {
                             {/*<Link to="/settings">*/}
                             {/*    <li>Settings</li>*/}
                             {/*</Link>*/}
-                            {/*<Link to="/invoices">*/}
-                            {/*    <li>Billing</li>*/}
-                            {/*</Link>*/}
+                            <Link to="/billing">
+                                <li>Billing</li>
+                            </Link>
                             <li
                                 onClick={() =>
                                     auth.signout(() => navigate('/'))

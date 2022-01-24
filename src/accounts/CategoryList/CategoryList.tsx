@@ -6,14 +6,16 @@ import {
     GetCategory,
 } from '../../services/services';
 import {CloseCircleFilled, FormOutlined} from '@ant-design/icons';
+import {useNavigate} from 'react-router-dom';
 
 export const CategoryList = (props) => {
+    const navigate = useNavigate();
     const closeConnection = (_id) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        CloseCategory(_id).then((r) => {
+        CloseCategory(navigate, _id).then((r) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             props.loadCategories().then((r) => {
-                GetAccountsWithoutCategory().then((r) => {
+                GetAccountsWithoutCategory(navigate).then((r) => {
                     props.setter.setNoCategoryAccounts(r);
                 });
             });
@@ -21,15 +23,15 @@ export const CategoryList = (props) => {
     };
 
     const editCategoryModal = (_id) => {
-        GetCategory(_id).then((r) => {
+        GetCategory(navigate, _id).then((r) => {
             props.setter.setEditable(_id);
             props.setter.setVisible(true);
             props.setter.setCategoryName(r.label);
             props.setter.setCategoryDescription(r.description);
-            GetAccountsByCategory(_id).then((r) =>
+            GetAccountsByCategory(navigate, _id).then((r) =>
                 props.setter.setActiveAccounts(r),
             );
-            GetAccountsWithoutCategory().then((r) => {
+            GetAccountsWithoutCategory(navigate).then((r) => {
                 props.setter.setNoCategoryAccounts(r);
                 props.setter.setNoCategoriesAccounts(r);
             });

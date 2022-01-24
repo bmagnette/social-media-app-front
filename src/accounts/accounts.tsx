@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     CloseAccount,
+    errorsHandlers,
     GetAccountsWithoutCategory,
     GetCategories,
 } from '../services/services';
@@ -11,6 +12,7 @@ import './accounts.scss';
 import {Button} from '../shared/Input/Button';
 import {ConnectButtons} from './ConnectButtons/ConnectButtons';
 import {v4 as uuidv4} from 'uuid';
+import {useNavigate} from 'react-router-dom';
 
 export const Accounts = () => {
     const [categories, setCategories] = useState(null);
@@ -34,17 +36,17 @@ export const Accounts = () => {
     const [isVisible, setVisible] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [isEditable, setEditable] = useState(null);
-
+    const navigate = useNavigate();
     async function loadCategories() {
-        setCategories(await GetCategories());
+        setCategories(await GetCategories(navigate));
     }
 
     const closeConnection = (_id) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        CloseAccount(_id).then((r) => {
+        errorsHandlers(CloseAccount(navigate, _id), navigate).then((r) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             loadCategories().then((r) => {
-                GetAccountsWithoutCategory().then((r) => {
+                GetAccountsWithoutCategory(navigate).then((r) => {
                     setNoCategoryAccounts(r);
                 });
             });
@@ -55,18 +57,19 @@ export const Accounts = () => {
         if (!categories) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             loadCategories().then((r) => {
-                GetAccountsWithoutCategory().then((r) => {
+                GetAccountsWithoutCategory(navigate).then((r) => {
                     setNoCategoryAccounts(r);
                     return;
                 });
                 return;
             });
         }
-    }, [categories, setCategories]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [categories, setCategories, navigate]);
 
     const showModal = () => {
         setVisible(true);
-        GetAccountsWithoutCategory().then((r) => {
+        GetAccountsWithoutCategory(navigate).then((r) => {
             setNoCategoriesAccounts(r);
         });
     };
@@ -109,7 +112,7 @@ export const Accounts = () => {
     return (
         <div className={'account-page-wrapper'}>
             <div className={'account-wrapper'}>
-                <ConnectButtons />
+                <ConnectButtons navigate={navigate} />
                 {categories !== null && (
                     <ul>
                         {categories.map((category) => {

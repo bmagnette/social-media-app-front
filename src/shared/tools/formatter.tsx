@@ -22,3 +22,7 @@ export const getDateFormatter = () => {
 export const formatDate = (date) => {
     return getDateFormatter().format(new Date(date));
 };
+
+export const formatPythonDate = (date) => {
+    return getDateFormatter().format(new Date(date * 1000));
+};

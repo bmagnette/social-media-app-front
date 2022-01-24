@@ -15,6 +15,7 @@ import {TabsInput} from '../shared/Tabs/Tabs/Tabs';
 import {ImageUploader} from './image-uploader/image-uploader';
 import {v4 as uuidv4} from 'uuid';
 import {toast} from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
 
 export const Posts = () => {
     const [accounts, setAccounts] = useState([]);
@@ -29,9 +30,9 @@ export const Posts = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [category, setCategory] = useState(null);
-
+    const navigate = useNavigate();
     async function loadCategories() {
-        const categories = await GetCategories();
+        const categories = await GetCategories(navigate);
         setCategories(categories);
 
         const catego = categories.map((category: {label: string}) => {
@@ -44,7 +45,7 @@ export const Posts = () => {
     }
 
     async function loadAccounts() {
-        const accounts = await GetAccountsWithoutCategory();
+        const accounts = await GetAccountsWithoutCategory(navigate);
         setAccounts(accounts);
     }
 
@@ -65,7 +66,7 @@ export const Posts = () => {
         };
 
         if (activeAccounts.length > 0 && message.length > 2) {
-            PostMessage(payload).then((r) => console.log(r));
+            PostMessage(navigate, payload).then((r) => console.log(r));
         } else {
             const message =
                 activeAccounts.length === 0
@@ -86,14 +87,14 @@ export const Posts = () => {
 
     const onDropdownChange = async (value) => {
         if (value.label === 'Without category') {
-            setAccounts(await GetAccountsWithoutCategory());
+            setAccounts(await GetAccountsWithoutCategory(navigate));
         } else {
             const category = categories.find(
                 (category) => category.label === value.label,
             );
             setCategory(category.id);
             setDropdownValue(value.value);
-            setAccounts(await GetAccountsByCategory(category.id));
+            setAccounts(await GetAccountsByCategory(navigate, category.id));
         }
         setMessage('');
     };

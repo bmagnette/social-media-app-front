@@ -1,0 +1,33 @@
+.twitter-button{
+  background-color: rgb(0,51,102);
+}
+
+.facebook-button{
+  background-color: rgb(0,115,207);
+}
+
+.linkedin-button{
+  background-color: rgb(42,82,190);
+}
+
+.instagram-button{
+  background-color: rgb(8,146,208);
+}
+
+.pinterest-button{
+  background-color: rgb(27,85,131);
+}
+
+.connexion-wrapper{
+  font-size: 14px;
+  line-height: 1.42857;
+  color: white;
+  font-family: salesforce-sans, 'Helvetica Neue', helvetica, arial,
+  sans-serif;
+
+  button{
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
