@@ -50,13 +50,7 @@ export const Billing = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const saveCard = (payload) => {
-        const test = {
-            creditCardNumber: '4242424242424242',
-            expirationDate: '03/25',
-            CVC: '353',
-            holder: 'Baptiste Magnette',
-        };
-        createCustomer(test)
+        createCustomer(payload)
             .then((r) => {
                 toast.info(r.data.message, {
                     position: 'top-right',

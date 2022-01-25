@@ -58,19 +58,18 @@ export const AddCard = (props) => {
 
     const handleOk = () => {
         const payload = {creditCardNumber, expirationDate, CVC, holder};
-        props.handleOk(payload);
 
-        // if (
-        //     creditCardNumber.length === 16 &&
-        //     expirationDate.length === 5 &&
-        //     CVC.length === 3
-        // ) {
-        //     props.handleOk(payload);
-        // } else {
-        //     setErrorMessage(
-        //         'Credit card data are wrong, there is certainly a typo in your forms.',
-        //     );
-        // }
+        if (
+            creditCardNumber.length === 16 &&
+            expirationDate.length === 5 &&
+            CVC.length === 3
+        ) {
+            props.handleOk(payload);
+        } else {
+            setErrorMessage(
+                'Credit card data are wrong, there is certainly a typo in your forms.',
+            );
+        }
     };
 
     return (
