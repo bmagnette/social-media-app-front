@@ -235,26 +235,10 @@ export const GetPostBatch = (navigate) => {
         });
 };
 
-export const getPrice = () => {
+export const getUserInfos = () => {
     const token = localStorage.getItem('TOKEN');
 
-    return axios.get(BACK_END_URL + '/user/price', {
-        headers: privateHeader(token),
-    });
-};
-
-export const getAccountsNumber = () => {
-    const token = localStorage.getItem('TOKEN');
-
-    return axios.get(BACK_END_URL + '/user/accounts', {
-        headers: privateHeader(token),
-    });
-};
-
-export const getEndFreeTrial = () => {
-    const token = localStorage.getItem('TOKEN');
-
-    return axios.get(BACK_END_URL + '/user/end_free_trial', {
+    return axios.get(BACK_END_URL + '/user/settings', {
         headers: privateHeader(token),
     });
 };
@@ -303,12 +287,14 @@ export const errorsHandlers = (axiosResponse, navigate) => {
             if (error.response.status === 401) {
                 navigate('/login');
             }
+
             toast.error(error.response.data.message, {
                 position: 'top-right',
                 autoClose: 5000,
                 closeOnClick: true,
                 pauseOnHover: true,
             });
+            return error;
         });
 };
 

@@ -1,13 +1,12 @@
 import './billing.scss';
 import React, {useEffect, useState} from 'react';
-import {
-    errorsHandlersGET,
-    getPrice,
-    getAccountsNumber,
-    getEndFreeTrial,
-} from '../services/services';
+import {errorsHandlersGET, getUserInfos} from '../services/services';
 import {useNavigate} from 'react-router';
 import {formatDate, formatPythonDate} from '../shared/tools/formatter';
+import {AddCard} from './Modal/AddCard';
+import {Button} from '../shared/Input/Button';
+import {createCustomer} from '../services/Stripe';
+import {toast} from 'react-toastify';
 
 export const Billing = () => {
     const navigate = useNavigate();
@@ -15,19 +14,25 @@ export const Billing = () => {
     const [invoices, setInvoices] = useState([]);
 
     const [currentPrice, setCurrentPrice] = useState(0.0);
-    const [numberAccount, setNumberAccounts] = useState(1);
+    const [numberAccount, setNumberAccounts] = useState(0);
     const [endFreeTrial, setEndFreeTrial] = useState(formatDate(new Date()));
+    const [isCardModalVisible, setIsCardModalVisible] = useState(false);
+
+    const [card, setCard] = useState(null);
+    const [freePlanLeft, setFreePlanLeft] = useState(0);
 
     async function loadData() {
-        setCurrentPrice(await errorsHandlersGET(getPrice(), navigate));
-        setNumberAccounts(
-            await errorsHandlersGET(getAccountsNumber(), navigate),
-        );
-        setEndFreeTrial(
-            formatPythonDate(
-                await errorsHandlersGET(getEndFreeTrial(), navigate),
-            ),
-        );
+        const res = await errorsHandlersGET(getUserInfos(), navigate);
+        const diff_days =
+            new Date(res.end_free_trial * 1000).getTime() -
+            new Date().getTime();
+
+        setFreePlanLeft(Math.round(diff_days / (1000 * 3600 * 24)));
+        setCurrentPrice(res.current_price);
+        setNumberAccounts(res.current_accounts);
+        setEndFreeTrial(formatPythonDate(res.end_free_trial));
+        setCard(res.card);
+        return;
     }
 
     useEffect(() => {
@@ -35,6 +40,49 @@ export const Billing = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const isCardVisible = () => {
+        setIsCardModalVisible(!isCardModalVisible);
+    };
+
+    const closeCardModal = () => {
+        setIsCardModalVisible(false);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const saveCard = (payload) => {
+        const test = {
+            creditCardNumber: '4242424242424242',
+            expirationDate: '03/25',
+            CVC: '353',
+            holder: 'Baptiste Magnette',
+        };
+        createCustomer(test)
+            .then((r) => {
+                toast.info(r.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
+                loadData().then((r) => {
+                    console.log(r);
+                    setIsCardModalVisible(false);
+                });
+            })
+            .catch(function (error) {
+                if (error.response.status === 401) {
+                    navigate('/login');
+                }
+
+                toast.error(error.response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
+                return error;
+            });
+    };
     return (
         <div className={'billing-wrapper'}>
             <div className={'billing-section'}>
@@ -43,14 +91,36 @@ export const Billing = () => {
                 </div>
                 <div className={'billing-content'}>
                     <div className={'stripe-card'}>
-                        <div>
-                            This account is billed to Visa card ending in 9630
-                        </div>
-                        <div className={'billing-card-button'}>
-                            <button>Add credit card</button>
-                            <button>Remove credit card</button>
-                            <button>Change credit card</button>
-                        </div>
+                        {card ? (
+                            <div className={'billing-card-button'}>
+                                <div>
+                                    Billed to {card.brand} card ending in{' '}
+                                    {card.last4} expiring in {card.exp_month}/
+                                    {card.exp_year}
+                                </div>
+                                <div>
+                                    <Button
+                                        className={'big-square-blue'}
+                                        submit={isCardVisible}
+                                        title={'Change credit card'}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className={'billing-card-button'}>
+                                <div>
+                                    In {freePlanLeft} days, you will need to
+                                    activate your payment.
+                                </div>
+                                <div>
+                                    <Button
+                                        className={'big-square-blue'}
+                                        submit={isCardVisible}
+                                        title={'Add credit card'}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <br />
                     <table>
@@ -102,6 +172,11 @@ export const Billing = () => {
                     </table>
                 </div>
             </div>
+            <AddCard
+                isVisible={isCardModalVisible}
+                onCancel={closeCardModal}
+                handleOk={saveCard}
+            />
         </div>
     );
 };

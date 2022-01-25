@@ -64,6 +64,7 @@ export const Accounts = () => {
                 return;
             });
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [categories, setCategories, navigate]);
 
