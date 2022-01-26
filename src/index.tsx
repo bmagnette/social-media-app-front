@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import {
     BrowserRouter,
-    Navigate,
-    Outlet,
+    // Navigate,
+    // Outlet,
     Route,
     Routes,
-    useLocation,
+    // useLocation,
 } from 'react-router-dom';
 import {Posts} from './posts/posts';
 import {Accounts} from './accounts/accounts';
@@ -34,7 +34,6 @@ const AuthContext = React.createContext<AuthContextType>(null!);
 
 function AuthProvider({children}: {children: React.ReactNode}) {
     const [user, setUser] = useState(null);
-
     const signin = (newUser: string, callback: VoidFunction) => {
         return fakeAuthProvider.signin(() => {
             setUser(newUser);
@@ -72,16 +71,16 @@ export function useAuth() {
     return React.useContext(AuthContext);
 }
 
-function RequireAuth() {
-    const auth = useAuth();
-    const location = useLocation();
-
-    if (!auth.user) {
-        return <Navigate to="/login" state={{from: location}} />;
-    }
-
-    return <Outlet />;
-}
+// function RequireAuth() {
+//     const auth = useAuth();
+//     const location = useLocation();
+//     console.log(auth);
+//     if (!auth.user) {
+//         return <Navigate to="/login" state={{from: location}} />;
+//     }
+//
+//     return <Outlet />;
+// }
 
 ReactDOM.render(
     <React.StrictMode>
@@ -92,24 +91,24 @@ ReactDOM.render(
                     <Route path="/register" element={<RegisterForm />} />
 
                     <Route element={<App />}>
-                        <Route element={<RequireAuth />}>
-                            <Route path="/billing" element={<Billing />} />
-                            <Route path="/drafts" element={<Drafts />} />
-                            <Route path="/accounts" element={<Accounts />} />
-                            <Route path="/analytics" element={<Analytics />} />
-                            <Route path="/users" element={<Users />} />
-                            <Route path="/calendar" element={<Calendar />} />
-                            <Route path="/posts" element={<Posts />} />
-                            <Route path="/settings" element={<Settings />} />
-                            <Route
-                                path="*"
-                                element={
-                                    <main style={{padding: '1rem'}}>
-                                        <p>Theres nothing here!</p>
-                                    </main>
-                                }
-                            />
-                        </Route>
+                        {/*<Route element={<RequireAuth />}>*/}
+                        <Route path="/billing" element={<Billing />} />
+                        <Route path="/drafts" element={<Drafts />} />
+                        <Route path="/accounts" element={<Accounts />} />
+                        <Route path="/analytics" element={<Analytics />} />
+                        <Route path="/users" element={<Users />} />
+                        <Route path="/calendar" element={<Calendar />} />
+                        <Route path="/posts" element={<Posts />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route
+                            path="*"
+                            element={
+                                <main style={{padding: '1rem'}}>
+                                    <p>Theres nothing here!</p>
+                                </main>
+                            }
+                        />
+                        {/*</Route>*/}
                     </Route>
 
                     <Route
