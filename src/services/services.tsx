@@ -64,7 +64,7 @@ export const CloseCategory = (navigate, _id) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -86,7 +86,7 @@ export const GetCategories = (navigate) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -109,7 +109,7 @@ export const GetCategory = (navigate, _id) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -132,7 +132,7 @@ export const EditCategory = (navigate, _id, payload) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -155,7 +155,7 @@ export const AddCategory = (navigate, payload) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -178,7 +178,7 @@ export const GetAccountsWithoutCategory = (navigate) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -201,7 +201,7 @@ export const GetAccountsByCategory = (navigate, _id) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -224,7 +224,7 @@ export const GetPostBatch = (navigate) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -259,7 +259,7 @@ export const PostMessage = (navigate, payload) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',
@@ -285,7 +285,7 @@ export const errorsHandlers = (axiosResponse, navigate) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
 
             toast.error(error.response.data.message, {
@@ -305,7 +305,7 @@ export const errorsHandlersGET = (axiosResponse, navigate) => {
         })
         .catch(function (error) {
             if (error.response.status === 401) {
-                navigate('/login');
+                navigate('/');
             }
             toast.error(error.response.data.message, {
                 position: 'top-right',

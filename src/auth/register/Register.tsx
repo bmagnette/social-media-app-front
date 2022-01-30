@@ -43,7 +43,7 @@ export const RegisterForm = () => {
                                             closeOnClick: true,
                                             pauseOnHover: true,
                                         });
-                                        navigate('/login');
+                                        navigate('/');
                                     })
                                     .catch(function (error) {
                                         toast.error(
@@ -92,7 +92,7 @@ export const RegisterForm = () => {
                                 </span>
                             </div>
                             <div className={'wrapper-button'}>
-                                <Link to={'/login'}>
+                                <Link to={'/'}>
                                     <button id="login" className="off">
                                         Return
                                     </button>

@@ -65,7 +65,7 @@ export const Billing = () => {
             })
             .catch(function (error) {
                 if (error.response.status === 401) {
-                    navigate('/login');
+                    navigate('/');
                 }
 
                 toast.error(error.response.data.message, {

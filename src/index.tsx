@@ -87,7 +87,7 @@ ReactDOM.render(
         <BrowserRouter>
             <AuthProvider>
                 <Routes>
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/" element={<Login />} />
                     <Route path="/register" element={<RegisterForm />} />
 
                     <Route element={<App />}>

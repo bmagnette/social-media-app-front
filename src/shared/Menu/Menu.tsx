@@ -3,6 +3,7 @@ import React from 'react';
 import './Menu.scss';
 import {DownOutlined} from '@ant-design/icons';
 import {useAuth} from '../../index';
+import {Button} from '../Input/Button';
 
 export const Menu = () => {
     const navigate = useNavigate();
@@ -32,9 +33,10 @@ export const Menu = () => {
                 {/*    <li>Analytics</li>*/}
                 {/*</Link>*/}
                 <Link to="/posts">
-                    <li className={'button-menu'}>
-                        <button>Create a post</button>
-                    </li>
+                    <Button
+                        className={'little-square-blue'}
+                        title={'Create a post'}
+                    />
                 </Link>
             </ul>
             <div className="header_menu_wrapper">

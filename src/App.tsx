@@ -4,10 +4,18 @@ import {Menu} from './shared/Menu/Menu';
 import {Outlet} from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
+declare global {
+    interface Window {
+        foo: string;
+        CRISP_WEBSITE_ID: string;
+        $crisp: string[];
+    }
+}
+
 const App: React.FC = () => {
     useEffect(() => {
-        window['$crisp'] = [];
-        window['CRISP_WEBSITE_ID'] = 'd5566262-32c9-41d4-bbac-392942b259f6';
+        window.$crisp = [];
+        window.CRISP_WEBSITE_ID = 'd5566262-32c9-41d4-bbac-392942b259f6';
 
         (function () {
             const d = document;

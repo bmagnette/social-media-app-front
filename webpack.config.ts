@@ -77,6 +77,7 @@ const webpackConfig = (): Configuration => ({
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html',
+            favicon: './public/favicon.ico',
         }),
         new DefinePlugin({
             'process.env': JSON.stringify(dotenv.config().parsed),
