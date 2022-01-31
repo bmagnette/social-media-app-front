@@ -4,37 +4,11 @@ import {privateHeader} from '../shared/tools/headers';
 
 const BACK_END_URL = process.env.REACT_APP_API_URL;
 
-export const ConnectLinkedIn = () => {
+export const connectSocial = (provider) => {
     const token = localStorage.getItem('TOKEN');
-    return axios.post(
-        BACK_END_URL + '/linkedin/authorize',
-        {},
-        {
-            headers: privateHeader(token),
-        },
-    );
-};
-
-export const ConnectFacebookAccount = () => {
-    const token = localStorage.getItem('TOKEN');
-    return axios.post(
-        BACK_END_URL + '/linkedin/facebook-authorize',
-        {},
-        {
-            headers: privateHeader(token),
-        },
-    );
-};
-
-export const ConnectTwitterAccount = () => {
-    const token = localStorage.getItem('TOKEN');
-    return axios.post(
-        BACK_END_URL + '/linkedin/twitter-authorize',
-        {},
-        {
-            headers: privateHeader(token),
-        },
-    );
+    return axios.get(BACK_END_URL + '/oauth/authorize/' + provider, {
+        headers: privateHeader(token),
+    });
 };
 
 export const CloseAccount = (navigate, _id) => {
@@ -247,7 +221,9 @@ export const PostMessage = (navigate, payload) => {
     const token = localStorage.getItem('TOKEN');
 
     return axios
-        .post(BACK_END_URL + '/batch', privateHeader(token), payload)
+        .post(BACK_END_URL + '/batch', payload, {
+            headers: privateHeader(token),
+        })
         .then(function (response) {
             console.log(response);
             toast.info('Message sent !', {

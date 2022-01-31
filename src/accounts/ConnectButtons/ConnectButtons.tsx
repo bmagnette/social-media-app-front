@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-    ConnectLinkedIn,
-    ConnectTwitterAccount,
-    errorsHandlers,
-} from '../../services/services';
+import {connectSocial, errorsHandlers} from '../../services/services';
 import './ConnectButtons.scss';
 
 export const ConnectButtons = (props) => {
@@ -12,12 +8,15 @@ export const ConnectButtons = (props) => {
         <div className={'connexion-wrapper'}>
             <button
                 onClick={() =>
-                    errorsHandlers(ConnectTwitterAccount(), navigate)
+                    errorsHandlers(connectSocial('twitter'), navigate)
                 }
                 className={'twitter-button'}>
                 Twitter
             </button>
-            <button className={'disabled-button facebook-button'}>
+            <button
+                onClick={() =>
+                    errorsHandlers(connectSocial('facebook'), navigate)
+                }>
                 Facebook
             </button>
             <button className={'disabled-button instagram-button'}>
@@ -28,7 +27,9 @@ export const ConnectButtons = (props) => {
             </button>
             <button
                 className={'linkedin-button'}
-                onClick={() => errorsHandlers(ConnectLinkedIn(), navigate)}>
+                onClick={() =>
+                    errorsHandlers(connectSocial('linkedin'), navigate)
+                }>
                 LinkedIn
             </button>
         </div>

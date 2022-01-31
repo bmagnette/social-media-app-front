@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Login.scss';
 import {Link, useNavigate} from 'react-router-dom';
 import validator from 'validator';
@@ -11,7 +11,19 @@ export const Login = () => {
     const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
     const auth = useAuth();
+    useEffect(() => {
+        window.$crisp = [];
+        window.CRISP_WEBSITE_ID = 'd5566262-32c9-41d4-bbac-392942b259f6';
 
+        (function () {
+            const d = document;
+            const s = d.createElement('script');
+            s.src = 'https://client.crisp.chat/l.js';
+            s.async = Boolean(1);
+            s.id = 'chatID';
+            d.getElementsByTagName('head')[0].appendChild(s);
+        })();
+    }, []);
     return (
         <div className={'login-wrapper'}>
             <div id="back">

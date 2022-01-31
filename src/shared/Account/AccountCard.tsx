@@ -4,6 +4,9 @@ import LinkedIn from '../../asset/images/linkedin.png';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Twitter from '../../asset/images/twitter-icon.png';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import Facebook from '../../asset/images/facebook-icon.png';
 import React from 'react';
 import {CloseCircleFilled} from '@ant-design/icons';
 import './AccountCard.scss';
@@ -16,6 +19,8 @@ export const AccountCard = (props) => {
                 return LinkedIn;
             case 'TWITTER':
                 return Twitter;
+            case 'FACEBOOK':
+                return Facebook;
         }
     };
     return (
