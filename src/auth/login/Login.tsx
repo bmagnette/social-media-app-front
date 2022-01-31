@@ -13,7 +13,7 @@ export const Login = () => {
     const auth = useAuth();
     useEffect(() => {
         window.$crisp = [];
-        window.CRISP_WEBSITE_ID = 'd5566262-32c9-41d4-bbac-392942b259f6';
+        window.CRISP_WEBSITE_ID = 'e38ca6ad-fa2b-434f-bb07-cb43120dc08c';
 
         (function () {
             const d = document;
