@@ -1,33 +1,50 @@
-.twitter-button{
-  background-color: rgb(0,51,102);
+.twitter-button {
+    background-color: rgba(42,170,224,255);
 }
 
-.facebook-button{
-  background-color: rgb(0,115,207);
+.facebook-button {
+    background-color: rgba(13,126,196,255);
 }
 
-.linkedin-button{
-  background-color: rgb(42,82,190);
+.linkedin-button {
+    background-color: rgba(0,127,188,255);
 }
 
-.instagram-button{
-  background-color: rgb(8,146,208);
+.instagram-button {
+    background-color: rgb(8, 146, 208);
 }
 
-.pinterest-button{
-  background-color: rgb(27,85,131);
+.pinterest-button {
+    background-color: rgb(27, 85, 131);
 }
 
-.connexion-wrapper{
-  font-size: 14px;
-  line-height: 1.42857;
-  color: white;
-  font-family: salesforce-sans, 'Helvetica Neue', helvetica, arial,
-  sans-serif;
+.social-button {
+    border-top-right-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
+    font-weight: 600;
+    font-size: 13px;
+    color: #fff;
+    line-height: 16px;
+    letter-spacing: 0.5px;
 
-  button{
-    padding: 5px;
-    border-radius: 10px;
-    cursor: pointer;
+    &:hover{
+        box-shadow: 0 4px 7px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+  span{
+    padding: 10px;
   }
+}
+
+.connexion-wrapper {
+    font-size: 14px;
+    line-height: 1.42857;
+    color: white;
+    font-family: salesforce-sans, 'Helvetica Neue', helvetica, arial, sans-serif;
+
+    button {
+        padding: 5px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
 }

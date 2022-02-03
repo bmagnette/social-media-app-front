@@ -1,19 +1,28 @@
+body{
+    min-height: 100vh;
+    #root {
+        font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        Helvetica, Arial, sans-serif !important;
+        font-weight: 400 !important;
+        line-height: 1.5 !important;
+        font-size: 1em !important;
+    }
+
+    .app{
+        background-color: #f0f2f5;
+        padding-bottom: 50px;
+        min-height: 100vh;
+    }
+}
+
 .wrapper {
     width: 75%;
     min-width: 800px;
     margin: 0 auto;
 }
 
-#root {
-    background-color: #f0f2f5;
-    min-height: 100%;
-    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    Helvetica, Arial, sans-serif !important;
-    font-weight: 400 !important;
-    line-height: 1.5 !important;
-    font-size: 1em !important;
-}
+
 
 $background-grey: #f8f9fa;
 $blue: rgba(29, 155, 240, 1);

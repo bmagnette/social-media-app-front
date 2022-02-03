@@ -51,8 +51,7 @@ export const AccountCard = (props) => {
                             alt={account.social_type}
                         />
                         <br />
-                        {account.account_name}
-                        {account.first_name} {account.last_name}{' '}
+                        {account.name}
                         {props.closeConnection ? (
                             <CloseCircleFilled
                                 onClick={() =>
