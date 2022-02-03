@@ -6,9 +6,13 @@ const BACK_END_URL = process.env.REACT_APP_API_URL;
 
 export const connectSocial = (provider) => {
     const token = localStorage.getItem('TOKEN');
-    return axios.get(BACK_END_URL + '/oauth/authorize/' + provider, {
-        headers: privateHeader(token),
-    });
+    return axios
+        .get(BACK_END_URL + '/oauth/authorize/' + provider, {
+            headers: privateHeader(token),
+        })
+        .then((res) => {
+            window.location.href = res.data.content;
+        });
 };
 
 export const CloseAccount = (navigate, _id) => {
