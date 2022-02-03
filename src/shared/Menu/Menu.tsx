@@ -42,7 +42,7 @@ export const Menu = () => {
             <div className="header_menu_wrapper">
                 <ul id="menu-demo2">
                     <li>
-                        Accel Gerancia <DownOutlined />
+                        Settings <DownOutlined />
                         <ul>
                             {/*<Link to="/settings">*/}
                             {/*    <li>Settings</li>*/}
