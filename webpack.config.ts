@@ -84,6 +84,7 @@ const webpackConfig = (): Configuration => ({
             'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
             'process.env.PAPERTRAIL_API_TOKEN': JSON.stringify(process.env.PAPERTRAIL_API_TOKEN),
+            'process.env.FRONT_END_APP_URI': JSON.stringify(process.env.FRONT_END_APP_URI),
         }),
         new ForkTsCheckerWebpackPlugin({
             eslint: {
