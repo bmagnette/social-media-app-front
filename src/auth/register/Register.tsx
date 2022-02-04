@@ -6,9 +6,47 @@ import {registerUser} from '../../services/services';
 import {toast} from 'react-toastify';
 
 export const RegisterForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
+
+    const validateForm = (e) => {
+        e.preventDefault();
+        if (!validator.isEmail(email)) {
+            setEmailError('Enter valid Email!');
+            return;
+        }
+
+        if (password.length <= 3) {
+            setPasswordError('Password must be longer');
+            return;
+        }
+        const payload = {
+            email: email,
+            password: password,
+        };
+        registerUser(payload)
+            .then(function (response) {
+                toast.info(response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
+                navigate('/');
+            })
+            .catch(function (error) {
+                toast.error(error.response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
+            });
+    };
     return (
         <div className={'register-wrapper'}>
             <div id="back">
@@ -20,42 +58,9 @@ export const RegisterForm = () => {
                     <div className="content">
                         <h2>Register</h2>
                         <form
+                            onKeyDown={(e) => validateForm(e)}
                             onSubmit={(e) => {
-                                e.preventDefault();
-                                if (!validator.isEmail(e.target[0].value)) {
-                                    setEmailError('Enter valid Email!');
-                                    return;
-                                }
-
-                                if (e.target[1].value.length <= 3) {
-                                    setPasswordError('Password must be longer');
-                                    return;
-                                }
-                                const payload = {
-                                    email: e.target[0].value,
-                                    password: e.target[1].value,
-                                };
-                                registerUser(payload)
-                                    .then(function (response) {
-                                        toast.info(response.data.message, {
-                                            position: 'top-right',
-                                            autoClose: 5000,
-                                            closeOnClick: true,
-                                            pauseOnHover: true,
-                                        });
-                                        navigate('/');
-                                    })
-                                    .catch(function (error) {
-                                        toast.error(
-                                            error.response.data.message,
-                                            {
-                                                position: 'top-right',
-                                                autoClose: 5000,
-                                                closeOnClick: true,
-                                                pauseOnHover: true,
-                                            },
-                                        );
-                                    });
+                                validateForm(e);
                             }}>
                             <div className="form-group">
                                 <label
@@ -63,7 +68,13 @@ export const RegisterForm = () => {
                                     className="form-label">
                                     Email
                                 </label>
-                                <input required name="email" type="email" />
+                                <input
+                                    required
+                                    name="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
                                 <span
                                     style={{
                                         fontWeight: 'bold',
@@ -82,6 +93,10 @@ export const RegisterForm = () => {
                                     required
                                     name="password"
                                     type="password"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                 />
                                 <span
                                     style={{

@@ -11,15 +11,18 @@ body{
 
     .app{
         background-color: #f0f2f5;
-        padding-bottom: 50px;
         min-height: 100vh;
     }
 }
 
 .wrapper {
-    width: 75%;
+    width: 80%;
     min-width: 800px;
+    height: 100%;
     margin: 0 auto;
+    padding-bottom: 50px;
+    padding-left: 25px;
+    padding-right: 25px;
 }
 
 
