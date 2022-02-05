@@ -1,15 +1,22 @@
-import Kalend, {CalendarView} from 'kalend';
 import 'kalend/dist/styles/index.css'; // import styles
 import React, {useEffect, useState} from 'react';
 import {GetCategories, GetPostBatch} from '../services/services';
 import {DropdownField} from '../shared/Input/Dropdown';
-import {Event} from './calendar.interfaces';
 import './calendar.scss';
 import {ModalAntd} from '../shared/Modal/modal-antd';
 import {useNavigate} from 'react-router-dom';
-
+import Paper from '@mui/material/Paper';
+import {
+    Appointments,
+    // DayView,
+    // WeekView,
+    MonthView,
+    Scheduler,
+} from '@devexpress/dx-react-scheduler-material-ui';
+import {ViewState} from '@devexpress/dx-react-scheduler';
 export const Calendar = () => {
     const [posts, setPosts] = useState([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [displayedPosts, setDisplayedPosts] = useState([]);
 
     const [dropdownOptions, setDropdownOptions] = useState([]);
@@ -18,6 +25,7 @@ export const Calendar = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [category, setCategory] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [post, setPost] = useState(null);
     const navigate = useNavigate();
     async function loadEvents() {
@@ -46,19 +54,11 @@ export const Calendar = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigate]);
 
-    const onEventClick = (data: Event) => {
-        setPost(data);
-        setIsVisible(true);
-        return '';
-    };
-
-    function getFormattedDate(date) {
-        const year = date.getFullYear();
-        const month = (1 + date.getMonth()).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-
-        return day + '-' + month + '-' + year;
-    }
+    // const onEventClick = (data: Event) => {
+    //     setPost(data);
+    //     setIsVisible(true);
+    //     return '';
+    // };
 
     const handleCancel = () => {
         setIsVisible(false);
@@ -83,10 +83,8 @@ export const Calendar = () => {
         }
         setDropdownValue(value.value);
     };
-
-    const constructEvents = (posts) => {
-        const res = {};
-
+    const contructEvents = (posts) => {
+        const res = [];
         posts.map((post) => {
             const postedDate = post.isScheduled
                 ? new Date(post.schedule_date * 1000)
@@ -100,38 +98,18 @@ export const Calendar = () => {
             const summary =
                 post?.posts.length === 0 ? '' : post?.posts[0].message;
             const event = {
-                startAt: postedDate.toISOString(),
-                endAt: postedDate.toISOString(),
-                summary: summary,
-                color: 'blue',
+                startDate: postedDate,
+                endDate: new Date(postedDate.getTime() + 1000 * 60),
+                title: summary,
                 accounts: accounts,
                 post: post,
+                id: post.id,
             };
 
-            if (res.hasOwnProperty(getFormattedDate(postedDate))) {
-                res[getFormattedDate(postedDate)].push(event);
-            } else {
-                res[getFormattedDate(postedDate)] = [event];
-            }
+            res.push(event);
             return post;
         });
         return res;
-    };
-
-    const onNewEventClick = () => {
-        return '';
-    };
-
-    const onSelectView = () => {
-        return '';
-    };
-
-    // const selectedView = () => {
-    //     return '';
-    // };
-
-    const onPageChange = () => {
-        return '';
     };
 
     return (
@@ -142,21 +120,13 @@ export const Calendar = () => {
                 onChange={onDropdownChange}
                 value={dropdownValue}
             />
-            <Kalend
-                onEventClick={onEventClick}
-                onNewEventClick={onNewEventClick}
-                events={constructEvents(displayedPosts)}
-                initialDate={new Date().toISOString()}
-                hourHeight={35}
-                initialView={CalendarView.WEEK}
-                disabledViews={[CalendarView.DAY]}
-                onSelectView={onSelectView}
-                onPageChange={onPageChange}
-                timeFormat={'24'}
-                weekDayStart={'Monday'}
-                calendarIDsHidden={['work']}
-                language={'en'}
-            />
+            <Paper>
+                <Scheduler data={contructEvents(displayedPosts)}>
+                    <ViewState currentDate={new Date()} />
+                    <MonthView />
+                    <Appointments />
+                </Scheduler>
+            </Paper>{' '}
             {post !== null ? (
                 <ModalAntd
                     visible={isVisible}

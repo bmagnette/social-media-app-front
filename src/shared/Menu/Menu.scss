@@ -8,7 +8,7 @@
     height: 62px;
     color: $blue;
     font-weight: 700;
-
+    box-shadow: 0 -1px rgba(0, 0, 0, 0.24) inset;
     ul {
         display: flex;
         padding: 0;
@@ -29,12 +29,12 @@
             }
 
             &:hover {
-                color: $blue;
+                color: $blue-hover;
             }
         }
 
-        &:first-of-type{
-            ul li{
+        &:first-of-type {
+            ul li {
                 padding-top: 15px !important;
             }
         }
@@ -52,6 +52,10 @@
     .menu-logo {
         font-weight: 600;
         font-size: 22px;
+
+        li{
+            padding: 15;
+        }
     }
 }
 

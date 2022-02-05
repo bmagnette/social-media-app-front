@@ -114,6 +114,8 @@ export const Accounts = () => {
         <div className={'account-page-wrapper'}>
             <div className={'account-wrapper'}>
                 <ConnectButtons navigate={navigate} />
+                <h2>Connected accounts</h2>
+                <hr />
                 {categories !== null && (
                     <ul>
                         {categories.map((category) => {

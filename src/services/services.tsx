@@ -229,8 +229,7 @@ export const PostMessage = (navigate, payload) => {
             headers: privateHeader(token),
         })
         .then(function (response) {
-            console.log(response);
-            toast.info('Message sent !', {
+            toast.info(response.data.message, {
                 position: 'top-right',
                 autoClose: 5000,
                 closeOnClick: true,

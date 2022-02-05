@@ -28,6 +28,7 @@ export const Posts = () => {
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [dropdownValue, setDropdownValue] = useState();
 
+    const [isLoading, setIsLoading] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [category, setCategory] = useState(null);
     const navigate = useNavigate();
@@ -56,6 +57,7 @@ export const Posts = () => {
     }, []);
 
     const submit = () => {
+        setIsLoading(true);
         const activeAccounts = accounts.filter(function (account) {
             return account.isActive === true;
         });
@@ -146,6 +148,7 @@ export const Posts = () => {
                             <Button
                                 className={'large-square-blue'}
                                 title={'Post now'}
+                                isLoading={isLoading}
                                 submit={submit}
                             />
                             <Button
