@@ -16,11 +16,11 @@ import {ImageUploader} from './image-uploader/image-uploader';
 import {v4 as uuidv4} from 'uuid';
 import {toast} from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
+import {ScheduleModal} from './schedule-modal';
 
 export const Posts = () => {
     const [accounts, setAccounts] = useState([]);
     const [message, setMessage] = useState('');
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [chosenEmoji, setChosenEmoji] = useState(null);
     const [categories, setCategories] = useState([]);
     // const [startDate, setStartDate] = useState(new Date());
@@ -29,9 +29,9 @@ export const Posts = () => {
     const [dropdownValue, setDropdownValue] = useState();
 
     const [isLoading, setIsLoading] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [category, setCategory] = useState(null);
     const navigate = useNavigate();
+
     async function loadCategories() {
         const categories = await GetCategories(navigate);
         setCategories(categories);
@@ -68,7 +68,30 @@ export const Posts = () => {
         };
 
         if (activeAccounts.length > 0 && message.length > 2) {
-            PostMessage(navigate, payload).then((r) => console.log(r));
+            PostMessage(navigate, payload)
+                .then(function (response) {
+                    toast.info(response.data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                    });
+                    setMessage('');
+                    setIsLoading(false);
+                })
+                .catch(function (error) {
+                    if (error.response.status === 401) {
+                        navigate('/');
+                    }
+
+                    toast.error(error.response.data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                    });
+                    setIsLoading(false);
+                });
         } else {
             const message =
                 activeAccounts.length === 0
@@ -80,7 +103,9 @@ export const Posts = () => {
                 closeOnClick: true,
                 pauseOnHover: true,
             });
+            setIsLoading(false);
         }
+        unselectAllAccounts(accounts);
     };
 
     const handleChange = (event) => {
@@ -99,6 +124,16 @@ export const Posts = () => {
             setAccounts(await GetAccountsByCategory(navigate, category.id));
         }
         setMessage('');
+    };
+
+    const unselectAllAccounts = (accounts) => {
+        const newAccounts = accounts.map((account) => {
+            if (account.hasOwnProperty('isActive')) {
+                account['isActive'] = false;
+            }
+            return account;
+        });
+        setAccounts(newAccounts);
     };
 
     function findSurrogatePair(point) {
@@ -132,7 +167,6 @@ export const Posts = () => {
                     setAccounts={setAccounts}
                 />
             </ul>
-
             <div>
                 {accounts.length > 0 && (
                     <form className={'post-form'}>
@@ -148,6 +182,7 @@ export const Posts = () => {
                             <Button
                                 className={'large-square-blue'}
                                 title={'Post now'}
+                                disabled={isLoading}
                                 isLoading={isLoading}
                                 submit={submit}
                             />
@@ -167,6 +202,7 @@ export const Posts = () => {
                     </form>
                 )}
             </div>
+            <ScheduleModal />
         </div>
     );
 };

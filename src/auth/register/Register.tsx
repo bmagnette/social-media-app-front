@@ -58,10 +58,7 @@ export const RegisterForm = () => {
                     <div className="content">
                         <h2>Register</h2>
                         <form
-                            onKeyDown={(e) => validateForm(e)}
-                            onSubmit={(e) => {
-                                validateForm(e);
-                            }}>
+                            onSubmit={validateForm}>
                             <div className="form-group">
                                 <label
                                     htmlFor="username"
@@ -73,7 +70,9 @@ export const RegisterForm = () => {
                                     name="email"
                                     type="email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                    }}
                                 />
                                 <span
                                     style={{
@@ -108,7 +107,7 @@ export const RegisterForm = () => {
                             </div>
                             <div className={'wrapper-button'}>
                                 <Link to={'/'}>
-                                    <button id="login" className="off">
+                                    <button id="login" className="off" type="button">
                                         Return
                                     </button>
                                 </Link>

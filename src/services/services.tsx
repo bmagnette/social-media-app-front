@@ -224,29 +224,9 @@ export const getUserInfos = () => {
 export const PostMessage = (navigate, payload) => {
     const token = localStorage.getItem('TOKEN');
 
-    return axios
-        .post(BACK_END_URL + '/batch', payload, {
-            headers: privateHeader(token),
-        })
-        .then(function (response) {
-            toast.info(response.data.message, {
-                position: 'top-right',
-                autoClose: 5000,
-                closeOnClick: true,
-                pauseOnHover: true,
-            });
-        })
-        .catch(function (error) {
-            if (error.response.status === 401) {
-                navigate('/');
-            }
-            toast.error(error.response.data.message, {
-                position: 'top-right',
-                autoClose: 5000,
-                closeOnClick: true,
-                pauseOnHover: true,
-            });
-        });
+    return axios.post(BACK_END_URL + '/batch', payload, {
+        headers: privateHeader(token),
+    });
 };
 
 export const registerUser = (payload) => {

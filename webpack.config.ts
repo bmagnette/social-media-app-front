@@ -87,9 +87,9 @@ const webpackConfig = (): Configuration => ({
             'process.env.FRONT_END_APP_URI': JSON.stringify(process.env.FRONT_END_APP_URI),
         }),
         new ForkTsCheckerWebpackPlugin({
-            eslint: {
-                files: './src/**/*.{ts,tsx,js,jsx}',
-            },
+            // eslint: {
+            //     files: './src/**/*.{ts,tsx,js,jsx}',
+            // },
         }),
     ],
 });

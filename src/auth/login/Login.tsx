@@ -58,9 +58,7 @@ export const Login = () => {
                 <div className="topLayer">
                     <div className="content">
                         <h2>Login</h2>
-                        <form
-                            onKeyDown={(e) => validateForm(e)}
-                            onSubmit={(e) => validateForm(e)}>
+                        <form onSubmit={validateForm}>
                             <div className="form-group">
                                 <label
                                     htmlFor="username"
@@ -104,7 +102,9 @@ export const Login = () => {
                             </div>
                             <div className={'wrapper-button'}>
                                 <Link to={'/register'}>
-                                    <button className="off">Sign Up</button>
+                                    <button className="off" type={'button'}>
+                                        Sign Up
+                                    </button>
                                 </Link>
                                 <button id="login" type="submit">
                                     Login
