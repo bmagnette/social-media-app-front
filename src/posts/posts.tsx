@@ -39,7 +39,7 @@ export const Posts = () => {
         const catego = categories.map((category: {label: string}) => {
             return category.label;
         });
-        catego.push('Without category');
+        catego.push('Without a group');
         const reverseList = catego.reverse();
         setDropdownValue(reverseList[0]);
         setDropdownOptions(reverseList);
@@ -113,7 +113,7 @@ export const Posts = () => {
     };
 
     const onDropdownChange = async (value) => {
-        if (value.label === 'Without category') {
+        if (value.label === 'Without a group') {
             setAccounts(await GetAccountsWithoutCategory(navigate));
         } else {
             const category = categories.find(
@@ -153,7 +153,7 @@ export const Posts = () => {
         <div className={'posts-wrapper'}>
             <div className={'selection-wrapper'}>
                 <DropdownField
-                    placeholder={'Select a category'}
+                    placeholder={'Select a group'}
                     options={dropdownOptions}
                     onChange={onDropdownChange}
                     value={dropdownValue}

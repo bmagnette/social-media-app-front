@@ -154,7 +154,7 @@ export const ModalCategory = (props) => {
                 ''
             )}
 
-            <h3>{isEditable && 'Without categories'}</h3>
+            <h3>{isEditable && 'Without a group'}</h3>
             <AccountCard
                 key={uuidv4()}
                 accounts={noCategoriesAccounts}

@@ -57,13 +57,6 @@ export const CategoryList = (props) => {
                             </li>
                         );
                     })}
-                    {props.categories.length === 0 ? (
-                        <div className={'bull-info'}>
-                            There is not category yet.
-                        </div>
-                    ) : (
-                        ''
-                    )}
                 </ul>
             )}
         </>

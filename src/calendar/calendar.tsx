@@ -41,7 +41,7 @@ export const Calendar = () => {
         const catego = categories.map((category: {label: string}) => {
             return category.label;
         });
-        catego.push('Without categories');
+        catego.push('Without a group');
         catego.push('All');
         const reverseList = catego.reverse();
         setDropdownValue(reverseList[0]);
@@ -69,7 +69,7 @@ export const Calendar = () => {
             (category) => category.label === value.label,
         );
 
-        if (value.label === 'Without categories') {
+        if (value.label === 'Without a group') {
             setDisplayedPosts([]);
         } else if (value.label === 'All') {
             setDisplayedPosts(posts);

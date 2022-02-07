@@ -135,7 +135,7 @@ export const Accounts = () => {
                             ''
                         ) : (
                             <>
-                                <h3>Account without category</h3>
+                                <h3>Account without group</h3>
                                 <AccountCard
                                     key={uuidv4()}
                                     accounts={noCategoryAccounts}
@@ -155,10 +155,11 @@ export const Accounts = () => {
                 )}
             </div>
             <div className={'category-wrapper'}>
+                <h2>Groups of accounts</h2>
                 <Button
                     className={'big-square-blue'}
                     submit={showModal}
-                    title={'Add category'}
+                    title={'Add a group'}
                 />
                 <ModalCategory modalParams={modalParams} />
                 <CategoryList

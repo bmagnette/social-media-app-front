@@ -52,24 +52,20 @@ export const AccountCard = (props) => {
                         />
                         <br />
                         {account.name}
-                        {props.closeConnection ? (
+                        {props.closeConnection && (
                             <CloseCircleFilled
                                 onClick={() =>
                                     props.closeConnection(account.id)
                                 }
                             />
-                        ) : (
-                            ''
                         )}
                     </li>
                 );
             })}
-            {props.accounts.length === 0 ? (
+            {props.accounts.length === 0 && (
                 <div className="bull-info">
                     Connect an account to start posting content.
                 </div>
-            ) : (
-                ''
             )}
         </div>
     );
