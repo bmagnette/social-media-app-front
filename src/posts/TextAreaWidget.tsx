@@ -1,4 +1,5 @@
-import Picker from 'emoji-picker-react';
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 import React, {useState} from 'react';
 import './TextAreaWidget.scss';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -32,7 +33,7 @@ export const TextAreaWidget = (props) => {
                         className={
                             emojiSelected ? 'widget-display' : 'widget-hide'
                         }>
-                        <Picker onEmojiClick={props.onEmojiClick} />
+                        <Picker onClick={props.onEmojiClick} style={{ position: 'absolute', top: '35px', left: '0px' }} i18n={{ search: 'Recherche', categories: { search: 'Résultats de recherche', recent: 'Récents' } }} />
                     </div>
                 </div>
                 <div className={'widget disabled-button'} onClick={showLoader}>

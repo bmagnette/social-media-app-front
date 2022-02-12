@@ -2,8 +2,8 @@
     height: 40px;
     display: flex;
     justify-content: space-between;
-    .emoji-picker-react{
-        z-index: 1;
+    .emoji-mart{
+        z-index: 1 !important;
     }
     .left-widget{
         display: flex;
@@ -12,6 +12,7 @@
         width: 45px;
         height: 40px;
         cursor: pointer;
+        position: relative;
         .widget-display {
             display: block;
         }

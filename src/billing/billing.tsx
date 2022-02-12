@@ -28,6 +28,7 @@ export const Billing = () => {
             new Date().getTime();
 
         setFreePlanLeft(Math.round(diff_days / (1000 * 3600 * 24)));
+        console.log(freePlanLeft);
         setCurrentPrice(res.current_price);
         setNumberAccounts(res.current_accounts);
         setEndFreeTrial(formatPythonDate(res.end_free_trial));
@@ -103,8 +104,9 @@ export const Billing = () => {
                         ) : (
                             <div className={'billing-card-button'}>
                                 <div>
-                                    In {freePlanLeft} days, you will need to
-                                    activate your payment.
+                                    {freePlanLeft <= 0
+                                        ? 'You need to activate your payment to continue using the platform.'
+                                        : `In ${freePlanLeft} days, you will need to activate your payment.`}
                                 </div>
                                 <div>
                                     <Button

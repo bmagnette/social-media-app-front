@@ -5,7 +5,6 @@ import {
     GetCategories,
     PostMessage,
 } from '../services/services';
-import 'react-datepicker/dist/react-datepicker.css';
 import {clickOnList} from '../shared/helpers/function';
 import {DropdownField} from '../shared/Input/Dropdown';
 import {AccountCard} from '../shared/Account/AccountCard';
@@ -16,20 +15,23 @@ import {ImageUploader} from './image-uploader/image-uploader';
 import {v4 as uuidv4} from 'uuid';
 import {toast} from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
-import {ScheduleModal} from './schedule-modal';
+import {ScheduleModal} from './schedule-modal/schedule-modal';
 
 export const Posts = () => {
     const [accounts, setAccounts] = useState([]);
     const [message, setMessage] = useState('');
     const [chosenEmoji, setChosenEmoji] = useState(null);
     const [categories, setCategories] = useState([]);
-    // const [startDate, setStartDate] = useState(new Date());
-    // const [value, onChange] = useState('10:00');
+
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [dropdownValue, setDropdownValue] = useState();
 
     const [isLoading, setIsLoading] = useState(false);
     const [category, setCategory] = useState(null);
+
+    const [isSchedulerVisible, setisSchedulerVisible] = useState(false);
+    const [scheduleDate, setScheduleDate] = useState(null);
+
     const navigate = useNavigate();
 
     async function loadCategories() {
@@ -53,10 +55,9 @@ export const Posts = () => {
     useEffect(() => {
         loadAccounts();
         loadCategories();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const submit = () => {
+    const submit = (schedulerPayload = {}) => {
         setIsLoading(true);
         const activeAccounts = accounts.filter(function (account) {
             return account.isActive === true;
@@ -65,6 +66,7 @@ export const Posts = () => {
         const payload = {
             accounts: activeAccounts,
             message: message,
+            ...schedulerPayload,
         };
 
         if (activeAccounts.length > 0 && message.length > 2) {
@@ -78,11 +80,12 @@ export const Posts = () => {
                     });
                     setMessage('');
                     setIsLoading(false);
+                    unselectAllAccounts(accounts);
                 })
                 .catch(function (error) {
-                    if (error.response.status === 401) {
-                        navigate('/');
-                    }
+                    // if (error.response.status === 401) {
+                    //     navigate('/');
+                    // }
 
                     toast.error(error.response.data.message, {
                         position: 'top-right',
@@ -105,7 +108,6 @@ export const Posts = () => {
             });
             setIsLoading(false);
         }
-        unselectAllAccounts(accounts);
     };
 
     const handleChange = (event) => {
@@ -143,10 +145,40 @@ export const Posts = () => {
         return String.fromCharCode(lead) + String.fromCharCode(trail);
     }
 
-    const onEmojiClick = (event, emojiObject) => {
-        setChosenEmoji(emojiObject);
-        const res = findSurrogatePair('0x' + emojiObject.unified);
+    const onEmojiClick = (emoji, event) => {
+        setChosenEmoji(emoji);
+        const res = findSurrogatePair('0x' + emoji.unified);
         setMessage(message + res);
+    };
+
+    const validateScheduler = (e) => {
+        setisSchedulerVisible(false);
+        setScheduleDate(null);
+        submit({
+            isScheduling: true,
+            scheduleTime: scheduleDate,
+        });
+    };
+
+    const showModal = () => {
+        const activeAccounts = accounts.filter(function (account) {
+            return account.isActive === true;
+        });
+
+        if (activeAccounts.length > 0 && message.length > 2) {
+            setisSchedulerVisible(true);
+        } else {
+            const message =
+                activeAccounts.length === 0
+                    ? 'No account selected'
+                    : 'Write a message';
+            toast.error(message, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        }
     };
 
     return (
@@ -184,13 +216,12 @@ export const Posts = () => {
                                 title={'Post now'}
                                 disabled={isLoading}
                                 isLoading={isLoading}
-                                submit={submit}
+                                submit={() => submit({})}
                             />
                             <Button
-                                className={'disabled'}
+                                className={'large-square-blue'}
                                 title={'Schedule'}
-                                submit={submit}
-                                disabled={true}
+                                submit={showModal}
                             />
                             <Button
                                 className={'disabled'}
@@ -202,7 +233,13 @@ export const Posts = () => {
                     </form>
                 )}
             </div>
-            <ScheduleModal />
+            <ScheduleModal
+                visible={isSchedulerVisible}
+                handleOk={validateScheduler}
+                scheduleDate={scheduleDate}
+                setScheduleDate={setScheduleDate}
+                handleCancel={() => setisSchedulerVisible(false)}
+            />
         </div>
     );
 };

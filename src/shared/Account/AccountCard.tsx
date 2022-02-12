@@ -21,6 +21,8 @@ export const AccountCard = (props) => {
                 return Twitter;
             case 'FACEBOOK':
                 return Facebook;
+            case 'FACEBOOK_PAGE':
+                return Facebook;
         }
     };
     return (

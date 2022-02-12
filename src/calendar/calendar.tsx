@@ -1,4 +1,3 @@
-import 'kalend/dist/styles/index.css'; // import styles
 import React, {useEffect, useState} from 'react';
 import {GetCategories, GetPostBatch} from '../services/services';
 import {DropdownField} from '../shared/Input/Dropdown';
@@ -8,12 +7,17 @@ import {useNavigate} from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import {
     Appointments,
-    // DayView,
-    // WeekView,
+    AppointmentTooltip,
+    DateNavigator,
+    DayView,
     MonthView,
     Scheduler,
+    Toolbar,
+    ViewSwitcher,
+    WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import {ViewState} from '@devexpress/dx-react-scheduler';
+
 export const Calendar = () => {
     const [posts, setPosts] = useState([]);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,9 +31,13 @@ export const Calendar = () => {
     const [isVisible, setIsVisible] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [post, setPost] = useState(null);
+
+    const [dateCalendar, setDateCalendar] = useState(new Date());
     const navigate = useNavigate();
+
     async function loadEvents() {
         const newPosts = await GetPostBatch(navigate);
+
         setPosts(newPosts);
         setDisplayedPosts(newPosts);
     }
@@ -54,14 +62,12 @@ export const Calendar = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigate]);
 
-    // const onEventClick = (data: Event) => {
-    //     setPost(data);
-    //     setIsVisible(true);
-    //     return '';
-    // };
-
     const handleCancel = () => {
         setIsVisible(false);
+    };
+
+    const currentDateChange = (date) => {
+        setDateCalendar(date);
     };
 
     const onDropdownChange = async (value) => {
@@ -70,7 +76,11 @@ export const Calendar = () => {
         );
 
         if (value.label === 'Without a group') {
-            setDisplayedPosts([]);
+            const noCategory = posts.filter((batch) => {
+                return batch.category === undefined;
+            });
+
+            setDisplayedPosts(noCategory);
         } else if (value.label === 'All') {
             setDisplayedPosts(posts);
         } else {
@@ -99,7 +109,7 @@ export const Calendar = () => {
                 post?.posts.length === 0 ? '' : post?.posts[0].message;
             const event = {
                 startDate: postedDate,
-                endDate: new Date(postedDate.getTime() + 1000 * 60),
+                endDate: new Date(postedDate.getTime() + 1000 * 10),
                 title: summary,
                 accounts: accounts,
                 post: post,
@@ -122,22 +132,24 @@ export const Calendar = () => {
             />
             <Paper>
                 <Scheduler data={contructEvents(displayedPosts)}>
-                    <ViewState currentDate={new Date()} />
+                    <ViewState
+                        currentDate={dateCalendar}
+                        onCurrentDateChange={currentDateChange}
+                    />
                     <MonthView />
+                    <WeekView />
+                    <DayView />
+                    <Toolbar />
                     <Appointments />
+                    <AppointmentTooltip
+                        showCloseButton
+                        // showDeleteButton
+                        // showOpenButton
+                    />
+                    <DateNavigator />
+                    <ViewSwitcher />
                 </Scheduler>
-            </Paper>{' '}
-            {post !== null ? (
-                <ModalAntd
-                    visible={isVisible}
-                    data={post}
-                    title={post?.summary}
-                    isFooter={false}
-                    handleCancel={handleCancel}
-                />
-            ) : (
-                ''
-            )}
+            </Paper>
         </>
     );
 };
