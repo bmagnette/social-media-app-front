@@ -13,7 +13,22 @@ import './AccountCard.scss';
 
 export const AccountCard = (props) => {
     const isClickOnlist = props.clickOnList ? 'cursor' : '';
-    const selectPicture = (socialMedia: string) => {
+    const selectPicture = (socialMedia: string, base64Img = null) => {
+        switch (socialMedia) {
+            case 'LINKEDIN':
+                return 'data:image/png;base64, ' + base64Img;
+            case 'TWITTER':
+                return Twitter;
+            case 'FACEBOOK':
+                return 'data:image/png;base64, ' + base64Img;
+            case 'FACEBOOK_PAGE':
+                return 'data:image/png;base64, ' + base64Img;
+            case 'FACEBOOK_GROUP':
+                return 'data:image/png;base64, ' + base64Img;
+        }
+    };
+
+    const selectType = (socialMedia: string) => {
         switch (socialMedia) {
             case 'LINKEDIN':
                 return LinkedIn;
@@ -22,6 +37,8 @@ export const AccountCard = (props) => {
             case 'FACEBOOK':
                 return Facebook;
             case 'FACEBOOK_PAGE':
+                return Facebook;
+            case 'FACEBOOK_GROUP':
                 return Facebook;
         }
     };
@@ -48,12 +65,22 @@ export const AccountCard = (props) => {
                                       )
                                 : null
                         }>
-                        <img
-                            src={selectPicture(account.social_type)}
-                            alt={account.social_type}
-                        />
-                        <br />
-                        {account.name}
+                        <div className={'profile-img-wrapper'}>
+                            <img
+                                className={'personalize-img'}
+                                src={selectPicture(
+                                    account.social_type,
+                                    account.profile_img,
+                                )}
+                                alt={account.social_type}
+                            />
+                            <img
+                                className={'profil-type'}
+                                src={selectType(account.social_type)}
+                                alt={account.social_type}
+                            />
+                        </div>
+                        <div className={'profil-name'}>{account.name}</div>
                         {props.closeConnection && (
                             <CloseCircleFilled
                                 onClick={() =>

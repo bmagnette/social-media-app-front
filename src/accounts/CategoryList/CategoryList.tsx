@@ -27,7 +27,6 @@ export const CategoryList = (props) => {
             props.setter.setEditable(_id);
             props.setter.setVisible(true);
             props.setter.setCategoryName(r.label);
-            props.setter.setCategoryDescription(r.description);
             GetAccountsByCategory(navigate, _id).then((r) =>
                 props.setter.setActiveAccounts(r),
             );
@@ -45,7 +44,7 @@ export const CategoryList = (props) => {
                     {props.categories.map((category) => {
                         return (
                             <li key={category.id}>
-                                {category.label} - {category.description}
+                                {category.label} ({category.accounts.length})
                                 <CloseCircleFilled
                                     onClick={() => closeConnection(category.id)}
                                 />

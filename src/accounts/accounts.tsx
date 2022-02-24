@@ -17,7 +17,6 @@ import {useNavigate} from 'react-router-dom';
 export const Accounts = () => {
     const [categories, setCategories] = useState(null);
     const [categoryName, setCategoryName] = useState('');
-    const [categoryDescription, setCategoryDescription] = useState('');
 
     //
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -78,7 +77,6 @@ export const Accounts = () => {
         setEditable,
         setVisible,
         setCategoryName,
-        setCategoryDescription,
         setNoCategoryAccounts,
         setActiveAccounts,
         setNoCategoriesAccounts,
@@ -87,12 +85,10 @@ export const Accounts = () => {
 
     const modalParams = {
         setCategoryName,
-        setCategoryDescription,
         setNoCategoryAccounts,
         setActiveAccounts,
         setLoading,
         categoryName,
-        categoryDescription,
         isEditable,
         loadCategories,
         setNoCategoriesAccounts,

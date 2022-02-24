@@ -14,11 +14,9 @@ import {useNavigate} from 'react-router-dom';
 export const ModalCategory = (props) => {
     const {
         setCategoryName,
-        setCategoryDescription,
         setNoCategoryAccounts,
         setLoading,
         categoryName,
-        categoryDescription,
         isEditable,
         loadCategories,
         setVisible,
@@ -37,10 +35,6 @@ export const ModalCategory = (props) => {
         setCategoryName(e.target.value);
     };
 
-    const setCategoryDescriptionField = (e) => {
-        setCategoryDescription(e.target.value);
-    };
-
     const handleOk = () => {
         setLoading(true);
 
@@ -48,7 +42,6 @@ export const ModalCategory = (props) => {
             const payload = {
                 accounts: activeAccounts,
                 categoryName: categoryName,
-                categoryDescription: categoryDescription,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             EditCategory(navigate, isEditable, payload).then((r) => {
@@ -67,7 +60,6 @@ export const ModalCategory = (props) => {
             const payload = {
                 accounts: selectedAccounts ? selectedAccounts : [],
                 categoryName: categoryName,
-                categoryDescription: categoryDescription,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             AddCategory(navigate, payload).then((r) => {
@@ -88,7 +80,6 @@ export const ModalCategory = (props) => {
         setVisible(false);
         setLoading(false);
         setCategoryName('');
-        setCategoryDescription('');
         setAccounts([]);
         setEditable(null);
     };
@@ -138,20 +129,13 @@ export const ModalCategory = (props) => {
             ]}>
             <h3>Name</h3>
             <InputField value={categoryName} onChange={setCategoryNameField} />
-            <h3>Description</h3>
-            <InputField
-                value={categoryDescription}
-                onChange={setCategoryDescriptionField}
-            />
             <h3>{isEditable ? 'Accounts' : 'Accounts available'}</h3>
-            {isEditable ? (
+            {isEditable && (
                 <AccountCard
                     key={uuidv4()}
                     accounts={activeAccounts}
                     clickOnList={removeAccount}
                 />
-            ) : (
-                ''
             )}
 
             <h3>{isEditable && 'Without a group'}</h3>
