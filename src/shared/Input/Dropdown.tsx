@@ -5,6 +5,7 @@ import './Dropdown.scss';
 
 export const DropdownField = (props) => {
     return (
+        <>
         <Dropdown
             className={props.className ? props.className : "medium-dropdown"}
             controlClassName={props.controlClassName}
@@ -14,5 +15,6 @@ export const DropdownField = (props) => {
             value={props.value}
             placeholder={props.placeholder}
         />
+        </>
     );
 };

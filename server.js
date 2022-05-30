@@ -3,7 +3,7 @@ const favicon = require('express-favicon');
 const expressStaticGzip = require('express-static-gzip');
 const express = require('express');
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 const app = express();
 
 app.use("/", expressStaticGzip(path.join(__dirname, 'build')));
