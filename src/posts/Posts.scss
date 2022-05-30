@@ -12,6 +12,8 @@
         float: left !important;
     }
     .selection-wrapper {
+        display: flex;
+        justify-content: space-between;
         margin-top: 20px;
         margin-bottom: 20px;
     }

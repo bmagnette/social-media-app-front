@@ -10,8 +10,12 @@ import Facebook from '../../asset/images/facebook-icon.png';
 import React from 'react';
 import {CloseCircleFilled} from '@ant-design/icons';
 import './AccountCard.scss';
+import {useOutletContext} from 'react-router';
+import {IUser} from '../../interface/IUser';
 
 export const AccountCard = (props) => {
+    const user = useOutletContext<IUser>();
+
     const isClickOnlist = props.clickOnList ? 'cursor' : '';
     const selectPicture = (socialMedia: string, base64Img = null) => {
         switch (socialMedia) {
@@ -43,7 +47,7 @@ export const AccountCard = (props) => {
         }
     };
     return (
-        <div className="accounts-card-wrapper">
+        <div className={"accounts-card-wrapper " + props?.className}>
             {props.accounts.map((account) => {
                 const isCursor =
                     props.clickOnList && !account?.isActive
@@ -81,7 +85,7 @@ export const AccountCard = (props) => {
                             />
                         </div>
                         <div className={'profil-name'}>{account.name}</div>
-                        {props.closeConnection && (
+                        {props.closeConnection && user?.user.user_type === "ADMIN" && (
                             <CloseCircleFilled
                                 onClick={() =>
                                     props.closeConnection(account.id)

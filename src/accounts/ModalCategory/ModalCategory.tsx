@@ -10,10 +10,14 @@ import {AccountCard} from '../../shared/Account/AccountCard';
 import {v4 as uuidv4} from 'uuid';
 import {clickOnList} from '../../shared/helpers/function';
 import {useNavigate} from 'react-router-dom';
+import {ColorPicker} from '../../shared/color-picker/color-picker';
+import {toast} from 'react-toastify';
 
 export const ModalCategory = (props) => {
     const {
         setCategoryName,
+        setColor,
+        color,
         setNoCategoryAccounts,
         setLoading,
         categoryName,
@@ -42,6 +46,7 @@ export const ModalCategory = (props) => {
             const payload = {
                 accounts: activeAccounts,
                 categoryName: categoryName,
+                color: color,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             EditCategory(navigate, isEditable, payload).then((r) => {
@@ -57,9 +62,22 @@ export const ModalCategory = (props) => {
             const selectedAccounts = noCategoriesAccounts.filter((account) => {
                 return account.isActive === true;
             });
+
+            if(!categoryName || !color){
+                setLoading(false);
+
+                toast.error('Missing category name or color.', {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
+                return;
+            }
             const payload = {
                 accounts: selectedAccounts ? selectedAccounts : [],
                 categoryName: categoryName,
+                color: color,
             };
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             AddCategory(navigate, payload).then((r) => {
@@ -79,6 +97,7 @@ export const ModalCategory = (props) => {
     const handleCancel = () => {
         setVisible(false);
         setLoading(false);
+        setColor(null);
         setCategoryName('');
         setAccounts([]);
         setEditable(null);
@@ -128,13 +147,16 @@ export const ModalCategory = (props) => {
                 </Button>,
             ]}>
             <h3>Name</h3>
-            <InputField value={categoryName} onChange={setCategoryNameField} />
+            <InputField value={categoryName} onChange={setCategoryNameField} placeholder={'Group name'}/>
+            <h3>Color</h3>
+            <ColorPicker color={color} colors={['Tomato', 'Orange', 'DodgerBlue', 'MediumSeaGreen', 'Gray', 'SlateBlue', 'Violet', 'LightGray']} selectColor={setColor} />
             <h3>{isEditable ? 'Accounts' : 'Accounts available'}</h3>
             {isEditable && (
                 <AccountCard
                     key={uuidv4()}
                     accounts={activeAccounts}
                     clickOnList={removeAccount}
+                    className={'no-context-style'}
                 />
             )}
 
@@ -144,6 +166,7 @@ export const ModalCategory = (props) => {
                 accounts={noCategoriesAccounts}
                 clickOnList={isEditable ? addAccount : clickOnList}
                 setAccounts={setAccounts}
+                className={'no-context-style'}
             />
         </Modal>
     );

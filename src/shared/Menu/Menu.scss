@@ -72,11 +72,18 @@
 }
 
 #menu-demo2 li {
-    width: 200px;
+    width: 300px;
     cursor: pointer;
 
     &:hover {
         color: white;
+    }
+
+    a{
+        &:first-child{
+            color: #1890ff;
+
+        }
     }
 }
 

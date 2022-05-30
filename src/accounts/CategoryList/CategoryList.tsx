@@ -6,10 +6,13 @@ import {
     GetCategory,
 } from '../../services/services';
 import {CloseCircleFilled, FormOutlined} from '@ant-design/icons';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useOutletContext} from 'react-router-dom';
+import {IUser} from '../../interface/IUser';
 
 export const CategoryList = (props) => {
     const navigate = useNavigate();
+    const user = useOutletContext<IUser>();
+
     const closeConnection = (_id) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         CloseCategory(navigate, _id).then((r) => {
@@ -27,6 +30,7 @@ export const CategoryList = (props) => {
             props.setter.setEditable(_id);
             props.setter.setVisible(true);
             props.setter.setCategoryName(r.label);
+            props.setter.setColor(r.color);
             GetAccountsByCategory(navigate, _id).then((r) =>
                 props.setter.setActiveAccounts(r),
             );
@@ -44,15 +48,31 @@ export const CategoryList = (props) => {
                     {props.categories.map((category) => {
                         return (
                             <li key={category.id}>
-                                {category.label} ({category.accounts.length})
-                                <CloseCircleFilled
-                                    onClick={() => closeConnection(category.id)}
-                                />
-                                <FormOutlined
-                                    onClick={() =>
-                                        editCategoryModal(category.id)
-                                    }
-                                />
+                                <div>
+                                    <span
+                                        style={{
+                                            borderRadius: '50px',
+                                            margin: '5px',
+                                            backgroundColor: category.color,
+                                            height: '20px',
+                                            display: 'block',
+                                            width: '20px',
+                                        }}
+                                    />
+                                    {category.label} ({category.accounts.length}
+                                    )
+                                    {user?.user.user_type === "ADMIN" &&                                     <CloseCircleFilled
+                                        onClick={() =>
+                                            closeConnection(category.id)
+                                        }
+                                    />}
+
+                                    <FormOutlined
+                                        onClick={() =>
+                                            editCategoryModal(category.id)
+                                        }
+                                    />
+                                </div>
                             </li>
                         );
                     })}

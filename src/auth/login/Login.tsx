@@ -36,6 +36,7 @@ export const Login = () => {
                 auth.signin(email, () => {
                     navigate('/accounts');
                     localStorage.setItem('TOKEN', response.data.user.token);
+                    localStorage.setItem('USER_TYPE', response.data.user.type);
                 });
             })
             .catch((error) => {

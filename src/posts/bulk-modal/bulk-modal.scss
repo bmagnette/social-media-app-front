@@ -1,0 +1,88 @@
+.bulk-settings {
+    display: flex;
+    width: 100%;
+    .bulk-list-messages {
+        height: 300px;
+        overflow-y: auto;
+        min-width: 225px;
+    }
+
+    .bulk-message-content{
+        width: 100%;
+    }
+    .bulk-list-title {
+        width: 100%;
+
+        padding-left: 20px;
+        padding-right: 20px;
+
+        h3 {
+            text-align: center;
+            font-weight: 900;
+        }
+
+        .bulk-message-schedule-time {
+            text-align: center;
+            margin: 10px;
+            padding: 5px;
+
+            .ant-picker {
+                margin: 5px;
+            }
+        }
+    }
+}
+
+.bulk-message {
+    line-height: 40px;
+    border-top: 1px solid darkgrey;
+    overflow-y: auto;
+    padding-left: 7px;
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    p{
+        display: block;
+        width: 150px;
+        overflow-y: hidden;
+        margin: 0;
+    }
+    &:first-child {
+        border-top: none;
+        text-align: center;
+        font-weight: 800;
+    }
+
+    &:not(:first-child) {
+        &:hover {
+            background-color: grey;
+        }
+
+        cursor: pointer;
+    }
+
+    &:nth-child(2) {
+        border-top: none;
+    }
+
+    svg{
+        color: green;
+        height: 24px;
+        width: 24px;
+        margin: 8px 5px 5px;
+    }
+
+    .anticon{
+        svg{
+            color: orange;
+        }
+    }
+}
+
+.ant-modal-close {
+    top: 15px !important;
+}
+
+.ant-modal-body {
+    padding-left: 0 !important;
+}

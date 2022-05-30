@@ -51,6 +51,7 @@
         padding: 10px;
         margin: 0;
     }
+
     button {
         min-width: 150px;
         margin-top: 2px;
@@ -89,4 +90,17 @@
     padding: 15px;
     text-align: center;
     border-radius: 10px;
+}
+
+.ant-modal-body h3{
+    margin-top: 10px !important;
+}
+
+.ant-modal-body{
+    padding-top: 0 !important;
+}
+
+.flex{
+    display: flex;
+    justify-content: space-around;
 }

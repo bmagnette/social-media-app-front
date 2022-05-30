@@ -20,7 +20,8 @@ export const getDateFormatter = () => {
 };
 
 export const formatDate = (date) => {
-    return getDateFormatter().format(new Date(date));
+    const newDate = typeof date === 'string' ? new Date(date) : date;
+    return getDateFormatter().format(newDate);
 };
 
 export const formatPythonDate = (date) => {

@@ -14,22 +14,20 @@ import {Accounts} from './accounts/accounts';
 import {Calendar} from './calendar/calendar';
 import 'antd/dist/antd.css';
 import {Drafts} from './draft/draft';
-import {Users} from './users/Users';
+import {Users} from './settings/users/Users';
 import {Analytics} from './analytics/analytics';
 import {Settings} from './settings/settings';
 import {Login} from './auth/login/Login';
 import {RegisterForm} from './auth/register/Register';
 import {ToastContainer} from 'react-toastify';
-import {Billing} from './billing/billing';
+import {Billing} from './settings/billing/billing';
 
 interface AuthContextType {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user: any;
     signin: (user: string, callback: VoidFunction) => void;
     signout: (callback: VoidFunction) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const AuthContext = React.createContext<AuthContextType>(null!);
 
 function AuthProvider({children}: {children: React.ReactNode}) {
@@ -92,7 +90,7 @@ ReactDOM.render(
 
                     <Route element={<App />}>
                         {/*<Route element={<RequireAuth />}>*/}
-                        <Route path="/billing" element={<Billing />} />
+                        <Route path="/settings" element={<Settings />} />
                         <Route path="/drafts" element={<Drafts />} />
                         <Route path="/accounts" element={<Accounts />} />
                         <Route path="/analytics" element={<Analytics />} />

@@ -6,8 +6,8 @@ import './Dropdown.scss';
 export const DropdownField = (props) => {
     return (
         <Dropdown
-            className="medium-dropdown"
-            controlClassName="medium-dropdown"
+            className={props.className ? props.className : "medium-dropdown"}
+            controlClassName={props.controlClassName}
             placeholderClassName="myPlaceholderClassName"
             options={props.options}
             onChange={props.onChange}

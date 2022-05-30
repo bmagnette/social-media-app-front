@@ -5,7 +5,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import dotenv from 'dotenv'
 
-const webpackConfig = (): Configuration => ({
+const webpackConfig = () => ({
     entry: './src/index.tsx',
     ...(process.env.production || !process.env.development
         ? {}

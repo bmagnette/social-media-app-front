@@ -25,7 +25,7 @@ export const CloseAccount = (navigate, _id) => {
 
 export const createAccount = (payload) => {
     const token = localStorage.getItem('TOKEN');
-    return axios.post(BACK_END_URL + '/account', payload, {
+    return axios.post(BACK_END_URL + '/user', payload, {
         headers: privateHeader(token),
     });
 };
@@ -57,6 +57,29 @@ export const GetCategories = (navigate) => {
 
     return axios
         .get(BACK_END_URL + '/categories', {
+            headers: privateHeader(token),
+        })
+        .then(function (response) {
+            return response['data']['content'];
+        })
+        .catch(function (error) {
+            if (error.response.status === 401) {
+                navigate('/');
+            }
+            toast.error(error.response.data.message, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        });
+};
+
+export const GetCategoriesByUser = (email, navigate) => {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios
+        .get(BACK_END_URL + '/categories/'+email, {
             headers: privateHeader(token),
         })
         .then(function (response) {
@@ -144,11 +167,80 @@ export const AddCategory = (navigate, payload) => {
         });
 };
 
+export const BulkUpload = (navigate, payload) => {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios
+        .post(BACK_END_URL + '/batch/bulk_upload', payload, {
+            headers: privateHeader(token),
+        })
+        .then(function (response) {
+            return response['data']['message'];
+        })
+        .catch(function (error) {
+            if (error.response.status === 401) {
+                navigate('/');
+            }
+            toast.error(error.response.data.message, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        });
+};
+
+export const GetAccounts = (navigate) => {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios
+        .get(BACK_END_URL + '/accounts', {
+            headers: privateHeader(token),
+        })
+        .then(function(response) {
+            return response['data']['content'];
+        })
+        .catch(function(error) {
+            if (error.response.status === 401) {
+                navigate('/');
+            }
+            toast.error(error.response.data.message, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        });
+}
+
 export const GetAccountsWithoutCategory = (navigate) => {
     const token = localStorage.getItem('TOKEN');
 
     return axios
         .get(BACK_END_URL + '/accounts/orphan', {
+            headers: privateHeader(token),
+        })
+        .then(function (response) {
+            return response['data']['content'];
+        })
+        .catch(function (error) {
+            if (error.response.status === 401) {
+                navigate('/');
+            }
+            toast.error(error.response.data.message, {
+                position: 'top-right',
+                autoClose: 5000,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        });
+};
+
+export const DeleteCalendarEvent = (navigate, _id) => {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios
+        .delete(BACK_END_URL + '/batch/' + _id, {
             headers: privateHeader(token),
         })
         .then(function (response) {
@@ -221,6 +313,30 @@ export const getUserInfos = () => {
     });
 };
 
+export const getUsers = () => {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios.get(BACK_END_URL + '/users', {
+        headers: privateHeader(token),
+    });
+};
+
+export const deleteUser = (_id) => {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios.delete(BACK_END_URL + '/user/' + _id, {
+        headers: privateHeader(token),
+    });
+};
+
+export const editUser = (payload) =>  {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios.put(BACK_END_URL + '/user/' + payload.email, payload, {
+        headers: privateHeader(token),
+    });
+};
+
 export const PostMessage = (navigate, payload) => {
     const token = localStorage.getItem('TOKEN');
 
@@ -240,7 +356,7 @@ export const loginApplication = (payload) => {
 export const errorsHandlers = (axiosResponse, navigate) => {
     return axiosResponse
         .then(function (response) {
-            console.log(response);
+            return response;
         })
         .catch(function (error) {
             if (error.response.status === 401) {

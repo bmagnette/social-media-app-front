@@ -1,0 +1,37 @@
+.add-user-modal-wrapper {
+    h3{
+        font-weight: 700;
+    }
+    .form-group {
+        margin: 15px;
+
+        .form-label{
+            padding-left: 35px;
+            text-align: left;
+            min-width: 140px;
+        }
+
+        input{
+            width: 250px;
+        }
+    }
+    .group-row-wrapper {
+        .group-row {
+            display: flex;
+            justify-content: space-around;
+            height: 40px;
+            line-height: 40px;
+            width: 80%;
+            margin: 5px auto 0;
+
+            &:first-child{
+                width: 100%;
+            }
+        }
+
+        .group-row-label{
+            width: 175px;
+            overflow-x: hidden;
+        }
+    }
+}

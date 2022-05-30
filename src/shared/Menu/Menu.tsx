@@ -5,7 +5,7 @@ import {DownOutlined} from '@ant-design/icons';
 import {useAuth} from '../../index';
 import {Button} from '../Input/Button';
 
-export const Menu = () => {
+export const Menu = (props) => {
     const navigate = useNavigate();
     const auth = useAuth();
 
@@ -20,11 +20,8 @@ export const Menu = () => {
                 {/*<Link to="/drafts">*/}
                 {/*    <li>Post</li>*/}
                 {/*</Link>*/}
-                {/*<Link to="/users">*/}
-                {/*    <li>User</li>*/}
-                {/*</Link>*/}
                 <Link to="/accounts">
-                    <li>Account</li>
+                    <li>Accounts</li>
                 </Link>
                 <Link to="/calendar">
                     <li>Calendar</li>
@@ -32,24 +29,21 @@ export const Menu = () => {
                 {/*<Link to="/analytics">*/}
                 {/*    <li>Analytics</li>*/}
                 {/*</Link>*/}
-                <Link to="/posts">
+                {props.user?.user.user_type !== "READER" &&                 <Link to="/posts">
                     <Button
                         className={'little-square-blue'}
                         title={'Create a post'}
                     />
-                </Link>
+                </Link>}
+
             </ul>
             <div className="header_menu_wrapper">
                 <ul id="menu-demo2">
                     <li>
-                        Settings <DownOutlined />
+                        <Link to="/settings">
+                            {props.user?.user.email} <DownOutlined />
+                        </Link>
                         <ul>
-                            {/*<Link to="/settings">*/}
-                            {/*    <li>Settings</li>*/}
-                            {/*</Link>*/}
-                            <Link to="/billing">
-                                <li>Billing</li>
-                            </Link>
                             <li
                                 onClick={() =>
                                     auth.signout(() => navigate('/'))

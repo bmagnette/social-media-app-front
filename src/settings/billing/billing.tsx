@@ -1,13 +1,13 @@
 import './billing.scss';
 import React, {useEffect, useState} from 'react';
-import {errorsHandlersGET, getUserInfos} from '../services/services';
+import {errorsHandlersGET, getUserInfos} from '../../services/services';
 import {useNavigate} from 'react-router';
-import {formatDate, formatPythonDate} from '../shared/tools/formatter';
+import {formatDate, formatPythonDate} from '../../shared/tools/formatter';
 import {AddCard} from './Modal/AddCard';
-import {Button} from '../shared/Input/Button';
-import {createCustomer} from '../services/Stripe';
+import {Button} from '../../shared/Input/Button';
+import {createCustomer} from '../../services/Stripe';
 import {toast} from 'react-toastify';
-
+import { useOutletContext } from "react-router-dom";
 export const Billing = () => {
     const navigate = useNavigate();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +15,8 @@ export const Billing = () => {
 
     const [currentPrice, setCurrentPrice] = useState(0.0);
     const [numberAccount, setNumberAccounts] = useState(0);
+    const [numberUsers, setNumberUsers] = useState(0);
+
     const [endFreeTrial, setEndFreeTrial] = useState(formatDate(new Date()));
     const [isCardModalVisible, setIsCardModalVisible] = useState(false);
 
@@ -28,9 +30,10 @@ export const Billing = () => {
             new Date().getTime();
 
         setFreePlanLeft(Math.round(diff_days / (1000 * 3600 * 24)));
-        console.log(freePlanLeft);
+
         setCurrentPrice(res.current_price);
         setNumberAccounts(res.current_accounts);
+        setNumberUsers(res.current_users);
         setEndFreeTrial(formatPythonDate(res.end_free_trial));
         setCard(res.card);
         return;
@@ -105,15 +108,15 @@ export const Billing = () => {
                             <div className={'billing-card-button'}>
                                 <div>
                                     {freePlanLeft <= 0
-                                        ? 'You need to activate your payment to continue using the platform.'
+                                        ?  currentPrice !== 0 ? 'You need to activate your payment to continue using the platform.': 'You are account is for free, enjoy our service !'
                                         : `In ${freePlanLeft} days, you will need to activate your payment.`}
                                 </div>
                                 <div>
-                                    <Button
+                                    {currentPrice !== 0 &&                                     <Button
                                         className={'big-square-blue'}
                                         submit={isCardVisible}
                                         title={'Add credit card'}
-                                    />
+                                    />}
                                 </div>
                             </div>
                         )}
@@ -124,6 +127,11 @@ export const Billing = () => {
                             <tr>
                                 <td>Number of Accounts connected</td>
                                 <td>{numberAccount}</td>
+                                <td />
+                            </tr>
+                            <tr>
+                                <td>Number of users connected</td>
+                                <td>{numberUsers}</td>
                                 <td />
                             </tr>
                             <tr>

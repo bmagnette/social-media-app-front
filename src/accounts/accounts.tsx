@@ -12,13 +12,16 @@ import './accounts.scss';
 import {Button} from '../shared/Input/Button';
 import {ConnectButtons} from './ConnectButtons/ConnectButtons';
 import {v4 as uuidv4} from 'uuid';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useOutletContext} from 'react-router-dom';
+import {IUser} from '../interface/IUser';
 
 export const Accounts = () => {
+    const user = useOutletContext<IUser>();
+
     const [categories, setCategories] = useState(null);
     const [categoryName, setCategoryName] = useState('');
+    const [color, setColor] = useState('');
 
-    //
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [accounts, setAccounts] = useState([]);
     const [noCategoryAccounts, setNoCategoryAccounts] = useState([]);
@@ -76,6 +79,7 @@ export const Accounts = () => {
     const setterCategory = {
         setEditable,
         setVisible,
+        setColor,
         setCategoryName,
         setNoCategoryAccounts,
         setActiveAccounts,
@@ -84,6 +88,8 @@ export const Accounts = () => {
     };
 
     const modalParams = {
+        setColor,
+        color,
         setCategoryName,
         setNoCategoryAccounts,
         setActiveAccounts,
@@ -109,7 +115,7 @@ export const Accounts = () => {
     return (
         <div className={'account-page-wrapper'}>
             <div className={'account-wrapper'}>
-                <ConnectButtons navigate={navigate} />
+                {user?.user.user_type !== "READER" && <ConnectButtons navigate={navigate} />}
                 <h2>Connected accounts</h2>
                 <hr />
                 {categories !== null && (
@@ -152,11 +158,12 @@ export const Accounts = () => {
             </div>
             <div className={'category-wrapper'}>
                 <h2>Groups of accounts</h2>
-                <Button
+                {user?.user.user_type == 'ADMIN' &&                 <Button
                     className={'big-square-blue'}
                     submit={showModal}
                     title={'Add a group'}
-                />
+                />}
+
                 <ModalCategory modalParams={modalParams} />
                 <CategoryList
                     categories={categories}

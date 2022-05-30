@@ -1,6 +1,38 @@
-.MuiPaper-root{
-  //height: 630px !important;
-  box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
-  border-radius: 10px;
-  margin-top: 15px;
+.MuiPaper-root {
+    //height: 630px !important;
+    box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.MuiPopover-root{
+  z-index: 1 !important;
+}
+
+.calendar-event-wrapper {
+    min-width: 400px;
+    width: 400px;
+    min-height: 150px;
+    padding: 10px;
+  z-index: 1;
+
+    .calendar-event-header {
+        font-weight: 700;
+        font-size: 18px;
+    }
+
+    .calendar-event-time {
+        font-weight: 500;
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .calendar-event-tools {
+        display: flex;
+        justify-content: right;
+        span {
+            padding: 5px;
+            font-size: 17px;
+        }
+    }
 }

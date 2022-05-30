@@ -1,0 +1,18 @@
+.color-picker-wrapper {
+    display: flex;
+    justify-content: center;
+    .color-box {
+        &:hover {
+            opacity: 1 !important;
+        }
+
+        &:focus {
+            opacity: 1 !important;
+        }
+    }
+}
+
+.color-box-focus {
+    opacity: 1 !important;
+    border: 2px solid black;
+}

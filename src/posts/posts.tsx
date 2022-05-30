@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-    GetAccountsByCategory,
-    GetAccountsWithoutCategory,
-    GetCategories,
-    PostMessage,
-} from '../services/services';
+import {GetAccountsByCategory, GetAccountsWithoutCategory, GetCategories, PostMessage} from '../services/services';
 import {clickOnList} from '../shared/helpers/function';
 import {DropdownField} from '../shared/Input/Dropdown';
 import {AccountCard} from '../shared/Account/AccountCard';
@@ -16,6 +11,10 @@ import {v4 as uuidv4} from 'uuid';
 import {toast} from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
 import {ScheduleModal} from './schedule-modal/schedule-modal';
+import {DownOutlined, SettingOutlined} from '@ant-design/icons';
+import 'antd/dist/antd.css';
+import {Button as Btn, Dropdown, Menu} from 'antd';
+import {BulkModal} from './bulk-modal/bulk-modal';
 
 export const Posts = () => {
     const [accounts, setAccounts] = useState([]);
@@ -32,6 +31,7 @@ export const Posts = () => {
     const [isSchedulerVisible, setisSchedulerVisible] = useState(false);
     const [scheduleDate, setScheduleDate] = useState(null);
 
+    const [isBulkUpload, setBulkUpload] = useState(false);
     const navigate = useNavigate();
 
     async function loadCategories() {
@@ -59,7 +59,7 @@ export const Posts = () => {
 
     const submit = (schedulerPayload = {}) => {
         setIsLoading(true);
-        const activeAccounts = accounts.filter(function (account) {
+        const activeAccounts = accounts.filter(function(account) {
             return account.isActive === true;
         });
 
@@ -71,7 +71,7 @@ export const Posts = () => {
 
         if (activeAccounts.length > 0 && message.length > 2) {
             PostMessage(navigate, payload)
-                .then(function (response) {
+                .then(function(response) {
                     toast.info(response.data.message, {
                         position: 'top-right',
                         autoClose: 5000,
@@ -82,7 +82,7 @@ export const Posts = () => {
                     setIsLoading(false);
                     unselectAllAccounts(accounts);
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     // if (error.response.status === 401) {
                     //     navigate('/');
                     // }
@@ -161,7 +161,7 @@ export const Posts = () => {
     };
 
     const showModal = () => {
-        const activeAccounts = accounts.filter(function (account) {
+        const activeAccounts = accounts.filter(function(account) {
             return account.isActive === true;
         });
 
@@ -181,6 +181,14 @@ export const Posts = () => {
         }
     };
 
+    const menu = (
+        <Menu>
+            <Menu.Item key={uuidv4()}>
+                <div onClick={() => setBulkUpload(true)}>Import Post from CSV</div>
+            </Menu.Item>
+        </Menu>
+    );
+
     return (
         <div className={'posts-wrapper'}>
             <div className={'selection-wrapper'}>
@@ -188,8 +196,14 @@ export const Posts = () => {
                     placeholder={'Select a group'}
                     options={dropdownOptions}
                     onChange={onDropdownChange}
+                    controlClassName={"medium-dropdown"}
                     value={dropdownValue}
                 />
+                <Dropdown overlay={menu}>
+                    <Btn>
+                        <SettingOutlined/> <DownOutlined/>
+                    </Btn>
+                </Dropdown>
             </div>
             <ul>
                 <AccountCard
@@ -209,7 +223,7 @@ export const Posts = () => {
                                 onEmojiClick={onEmojiClick}
                             />
                         </div>
-                        <ImageUploader />
+                        <ImageUploader/>
                         <div className={'button-wrapper'}>
                             <Button
                                 className={'large-square-blue'}
@@ -233,6 +247,11 @@ export const Posts = () => {
                     </form>
                 )}
             </div>
+            <BulkModal
+                visible={isBulkUpload}
+                handleCancel={() => setBulkUpload(false)}
+                accounts={accounts}
+            />
             <ScheduleModal
                 visible={isSchedulerVisible}
                 handleOk={validateScheduler}
