@@ -26,10 +26,10 @@
   },
   "exclude": [
     "node_modules",
-    "build"
+    "build",
+    "./src"
   ],
   "include": [
-    "./src",
     "webpack.config.ts"
   ]
 }

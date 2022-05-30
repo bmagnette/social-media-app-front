@@ -27,7 +27,6 @@ export const ScheduleModal = (props) => {
     };
 
     return (
-        <>
         <Modal
             visible={props.visible}
             onOk={handleSubmit}
@@ -54,6 +53,5 @@ export const ScheduleModal = (props) => {
                 showTime={{defaultValue: moment('00:00', 'HH:mm')}}
             />
         </Modal>
-            </>
     );
 };
