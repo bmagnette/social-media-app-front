@@ -37,7 +37,6 @@ export const AddUserModal = (props) => {
                 groups.map(group =>{
                     let res = r.find(test => {
                         if(test.id === group.id){
-                            console.log(group.id, {'access_type': test.right.access_type, 'checked': true});
                             return {'access_type': test.right.access_type, 'checked': true}
                         } else{
                             return null
@@ -63,7 +62,7 @@ export const AddUserModal = (props) => {
 
     const handleSubmit = () => {
         const payload = {
-            oldEmail: props.data.email,
+            oldEmail: props.data?.email,
             email,
             name,
             groups: isChecked,
@@ -91,7 +90,8 @@ export const AddUserModal = (props) => {
             });
             return;
         }
-        if (!props.data.email !== undefined && email !== props.data.email) {
+
+        if (props.data?.email !== undefined && email !== props.data?.email) {
             toast.error("You can't modify an email. Create a new account.", {
                 position: 'top-right',
                 autoClose: 5000,
@@ -171,7 +171,7 @@ export const AddUserModal = (props) => {
                             type="primary"
                             onClick={() => {
                                 handleCancel();
-                                props.onDelete(props.data.email)
+                                props.onDelete(props.data?.email)
                             }}>
                             Delete user
                         </Button>
