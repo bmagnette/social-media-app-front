@@ -6,7 +6,7 @@
 }
 
 .MuiPopover-root{
-  z-index: 1 !important;
+  //z-index: 1 !important;
 }
 
 .calendar-event-wrapper {
@@ -14,7 +14,7 @@
     width: 400px;
     min-height: 150px;
     padding: 10px;
-  z-index: 1;
+  //z-index: 1;
 
     .calendar-event-header {
         font-weight: 700;

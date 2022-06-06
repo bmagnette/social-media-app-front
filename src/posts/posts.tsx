@@ -9,15 +9,20 @@ import {TabsInput} from '../shared/Tabs/Tabs/Tabs';
 import {ImageUploader} from './image-uploader/image-uploader';
 import {v4 as uuidv4} from 'uuid';
 import {toast} from 'react-toastify';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useOutletContext} from 'react-router-dom';
 import {ScheduleModal} from './schedule-modal/schedule-modal';
 import {DownOutlined, SettingOutlined} from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import {Button as Btn, Dropdown, Menu} from 'antd';
 import {BulkModal} from './bulk-modal/bulk-modal';
+import {IUser} from '../interface/IUser';
 
 export const Posts = () => {
+
+    const user = useOutletContext<IUser>();
+
     const [accounts, setAccounts] = useState([]);
+    const [isLoadingAccounts, setIsLoadingAccounts] = useState(false);
     const [message, setMessage] = useState('');
     const [chosenEmoji, setChosenEmoji] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -41,7 +46,13 @@ export const Posts = () => {
         const catego = categories.map((category: {label: string}) => {
             return category.label;
         });
-        catego.push('Without a group');
+        if(user.user.user_type == 'ADMIN'){
+            catego.push('Without a group');
+        } else {
+            if(categories){
+                setAccounts(await GetAccountsByCategory(navigate, categories[0].id));
+            }
+        }
         const reverseList = catego.reverse();
         setDropdownValue(reverseList[0]);
         setDropdownOptions(reverseList);
@@ -53,9 +64,15 @@ export const Posts = () => {
     }
 
     useEffect(() => {
-        loadAccounts();
-        loadCategories();
-    }, []);
+        if(user){
+            setIsLoadingAccounts(true);
+            loadAccounts().then(r => {
+                loadCategories().then(r => {
+                    setIsLoadingAccounts(false);
+                });
+            });
+        }
+    }, [user]);
 
     const submit = (schedulerPayload = {}) => {
         setIsLoading(true);
@@ -210,11 +227,11 @@ export const Posts = () => {
                     key={uuidv4()}
                     accounts={accounts}
                     clickOnList={clickOnList}
+                    isLoadingAccounts={isLoadingAccounts}
                     setAccounts={setAccounts}
                 />
             </ul>
             <div>
-                {accounts.length > 0 && (
                     <form className={'post-form'}>
                         <div className="text-area-wrapper">
                             <TabsInput
@@ -245,7 +262,6 @@ export const Posts = () => {
                             />
                         </div>
                     </form>
-                )}
             </div>
             <BulkModal
                 visible={isBulkUpload}

@@ -2,12 +2,13 @@ import './billing.scss';
 import React, {useEffect, useState} from 'react';
 import {errorsHandlersGET, getUserInfos} from '../../services/services';
 import {useNavigate} from 'react-router';
-import {formatDate, formatPythonDate} from '../../shared/tools/formatter';
+import {deviseMapper, formatDate, formatPythonDate, formatStripePrice} from '../../shared/tools/formatter';
 import {AddCard} from './Modal/AddCard';
 import {Button} from '../../shared/Input/Button';
 import {createCustomer} from '../../services/Stripe';
 import {toast} from 'react-toastify';
-import { useOutletContext } from "react-router-dom";
+import {FilePdfOutlined, CloseOutlined, CheckOutlined} from '@ant-design/icons';
+
 export const Billing = () => {
     const navigate = useNavigate();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -25,6 +26,7 @@ export const Billing = () => {
 
     async function loadData() {
         const res = await errorsHandlersGET(getUserInfos(), navigate);
+
         const diff_days =
             new Date(res.end_free_trial * 1000).getTime() -
             new Date().getTime();
@@ -36,6 +38,7 @@ export const Billing = () => {
         setNumberUsers(res.current_users);
         setEndFreeTrial(formatPythonDate(res.end_free_trial));
         setCard(res.card);
+        setInvoices(res.invoices);
         return;
     }
 
@@ -159,9 +162,15 @@ export const Billing = () => {
                             {invoices.map((invoice) => {
                                 return (
                                     <tr key={invoice.id}>
-                                        <td>December 2021</td>
-                                        <td>{invoice.amount_ttc}</td>
-                                        <td>{invoice.status}</td>
+                                        <td>{ new Intl.DateTimeFormat('en-GB', {
+                                            year: 'numeric',
+                                            month: 'numeric',
+                                            day: 'numeric'}).format(new Date(invoice.created * 1000))}</td>
+                                        <td>{formatStripePrice(invoice.amount_paid) + " " + deviseMapper(invoice.currency)}</td>
+                                        <td>{invoice.amount_paid === invoice.amount_paid ? <CheckOutlined className={'green-paid'} />:  <CloseOutlined className={'red-unpaid'}/>}</td>
+                                        <td>{invoice.amount_paid === invoice.amount_paid ? <FilePdfOutlined className={'invoice-paid'} onClick={() => {
+                                            window.open(invoice.invoice_pdf, '_blank');
+                                        }} />: <FilePdfOutlined className={'invoice-unpaid'}/>}</td>
                                     </tr>
                                 );
                             })}

@@ -20,7 +20,6 @@ import {Settings} from './settings/settings';
 import {Login} from './auth/login/Login';
 import {RegisterForm} from './auth/register/Register';
 import {ToastContainer} from 'react-toastify';
-import {Billing} from './settings/billing/billing';
 
 interface AuthContextType {
     user: any;

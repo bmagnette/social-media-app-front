@@ -7,14 +7,14 @@ import Twitter from '../../asset/images/twitter-icon.png';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Facebook from '../../asset/images/facebook-icon.png';
-import React from 'react';
-import {CloseCircleFilled} from '@ant-design/icons';
+import React, {useState} from 'react';
 import './AccountCard.scss';
-import {useOutletContext} from 'react-router';
-import {IUser} from '../../interface/IUser';
+import {AccountModal} from '../Modal/account-modal/account-modal';
 
 export const AccountCard = (props) => {
-    const user = useOutletContext<IUser>();
+
+    const [isReadingAccount, setIsReadingAccount] = useState(false);
+    const [readingAccount, setReadingAccount] = useState(null);
 
     const isClickOnlist = props.clickOnList ? 'cursor' : '';
     const selectPicture = (socialMedia: string, base64Img = null) => {
@@ -67,7 +67,10 @@ export const AccountCard = (props) => {
                                           props.accounts,
                                           props.setAccounts,
                                       )
-                                : null
+                                : () => {
+                                    setIsReadingAccount(true);
+                                    setReadingAccount(account);
+                                }
                         }>
                         <div className={'profile-img-wrapper'}>
                             <img
@@ -85,21 +88,28 @@ export const AccountCard = (props) => {
                             />
                         </div>
                         <div className={'profil-name'}>{account.name}</div>
-                        {props.closeConnection && user?.user.user_type === "ADMIN" && (
-                            <CloseCircleFilled
-                                onClick={() =>
-                                    props.closeConnection(account.id)
-                                }
-                            />
-                        )}
                     </li>
                 );
             })}
-            {props.accounts.length === 0 && (
+            {!props.isLoadingAccounts && props.accounts.length === 0 && (
                 <div className="bull-info">
-                    Connect an account to start posting content.
+                    {!props.isLoadingAccounts ? 'Connect an account to start posting content.': ''}
                 </div>
             )}
+            {isReadingAccount && <AccountModal
+                visible={isReadingAccount}
+                data={readingAccount}
+                handleOk={() => {
+                    setIsReadingAccount(false);
+                    setReadingAccount(null);
+                }}
+                deleteAccount={props.closeConnection}
+                handleCancel={() => {
+                    setIsReadingAccount(false);
+                    setReadingAccount(null);
+                }}
+            />}
+
         </div>
     );
 };

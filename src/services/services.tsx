@@ -171,7 +171,7 @@ export const BulkUpload = (navigate, payload) => {
     const token = localStorage.getItem('TOKEN');
 
     return axios
-        .post(BACK_END_URL + '/batch/bulk_upload', payload, {
+        .post(BACK_END_URL + '/event/bulk_upload', payload, {
             headers: privateHeader(token),
         })
         .then(function (response) {
@@ -240,7 +240,7 @@ export const DeleteCalendarEvent = (navigate, _id) => {
     const token = localStorage.getItem('TOKEN');
 
     return axios
-        .delete(BACK_END_URL + '/batch/' + _id, {
+        .delete(BACK_END_URL + '/event/' + _id, {
             headers: privateHeader(token),
         })
         .then(function (response) {
@@ -286,7 +286,7 @@ export const GetPostBatch = (navigate) => {
     const token = localStorage.getItem('TOKEN');
 
     return axios
-        .get(BACK_END_URL + '/batchs', {
+        .get(BACK_END_URL + '/events', {
             headers: privateHeader(token),
         })
         .then(function (response) {
@@ -337,10 +337,18 @@ export const editUser = (payload) =>  {
     });
 };
 
+export const editEvent = (_id, payload) =>  {
+    const token = localStorage.getItem('TOKEN');
+
+    return axios.put(BACK_END_URL + '/event/' + _id, payload, {
+        headers: privateHeader(token),
+    });
+};
+
 export const PostMessage = (navigate, payload) => {
     const token = localStorage.getItem('TOKEN');
 
-    return axios.post(BACK_END_URL + '/batch', payload, {
+    return axios.post(BACK_END_URL + '/event', payload, {
         headers: privateHeader(token),
     });
 };

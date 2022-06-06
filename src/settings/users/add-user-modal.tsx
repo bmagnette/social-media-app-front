@@ -168,7 +168,7 @@ export const AddUserModal = (props) => {
                     </Button>
                     {props.data && (
                         <Button
-                            type="primary"
+                            danger
                             onClick={() => {
                                 handleCancel();
                                 props.onDelete(props.data?.email)

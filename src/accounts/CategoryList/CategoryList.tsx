@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     CloseCategory,
     GetAccountsByCategory,
@@ -8,18 +8,24 @@ import {
 import {CloseCircleFilled, FormOutlined} from '@ant-design/icons';
 import {useNavigate, useOutletContext} from 'react-router-dom';
 import {IUser} from '../../interface/IUser';
+import {WarningModal} from '../../shared/Modal/warning-modal/warning-modal';
 
 export const CategoryList = (props) => {
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [categoryClicked, setCategoryClicked] = useState(null);
     const navigate = useNavigate();
     const user = useOutletContext<IUser>();
 
-    const closeConnection = (_id) => {
+    const closeConnection = () => {
+        setIsLoading(true);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        CloseCategory(navigate, _id).then((r) => {
+        CloseCategory(navigate, categoryClicked).then((r) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             props.loadCategories().then((r) => {
                 GetAccountsWithoutCategory(navigate).then((r) => {
                     props.setter.setNoCategoryAccounts(r);
+                    setIsLoading(false);
                 });
             });
         });
@@ -40,10 +46,8 @@ export const CategoryList = (props) => {
             });
         });
     };
-
     return (
         <>
-            {props.categories !== null && (
                 <ul>
                     {props.categories.map((category) => {
                         return (
@@ -62,22 +66,41 @@ export const CategoryList = (props) => {
                                     {category.label} ({category.accounts.length}
                                     )
                                     {user?.user.user_type === "ADMIN" &&                                     <CloseCircleFilled
-                                        onClick={() =>
-                                            closeConnection(category.id)
+                                        onClick={() => {
+                                            setIsDeleting(true);
+                                            setCategoryClicked(category.id);
+                                        }
                                         }
                                     />}
-
+                                    {user?.user.user_type == 'ADMIN' && (
                                     <FormOutlined
                                         onClick={() =>
                                             editCategoryModal(category.id)
                                         }
-                                    />
+                                    />)}
                                 </div>
                             </li>
                         );
                     })}
                 </ul>
-            )}
+            <WarningModal
+                visible={isDeleting}
+                handleOk={() => {
+                    closeConnection();
+                    setIsDeleting(false);
+                    setIsLoading(false);
+                    setCategoryClicked(null);
+                }}
+                handleCancel={() => {
+                    setIsDeleting(false);
+                    setIsLoading(false);
+                    setCategoryClicked(null);
+                }}
+                submitButtonType={'danger'}
+                isLoading={isLoading}
+                actionLabel={'Delete'}
+                message={'Do you want to delete this group ?'}
+            />
         </>
     );
 };

@@ -18,12 +18,13 @@ import {IUser} from '../interface/IUser';
 export const Accounts = () => {
     const user = useOutletContext<IUser>();
 
-    const [categories, setCategories] = useState(null);
+    const [categories, setCategories] = useState([]);
     const [categoryName, setCategoryName] = useState('');
     const [color, setColor] = useState('');
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [accounts, setAccounts] = useState([]);
+    const [isLoadingAccounts, setIsLoadingAccounts] = useState(false);
     const [noCategoryAccounts, setNoCategoryAccounts] = useState([]);
 
     // For modal
@@ -44,11 +45,14 @@ export const Accounts = () => {
     }
 
     const closeConnection = (_id) => {
+        setIsLoadingAccounts(true);
+
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         errorsHandlers(CloseAccount(navigate, _id), navigate).then((r) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             loadCategories().then((r) => {
                 GetAccountsWithoutCategory(navigate).then((r) => {
+                    setIsLoadingAccounts(false);
                     setNoCategoryAccounts(r);
                 });
             });
@@ -56,19 +60,19 @@ export const Accounts = () => {
     };
 
     useEffect(() => {
-        if (!categories) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            loadCategories().then((r) => {
-                GetAccountsWithoutCategory(navigate).then((r) => {
-                    setNoCategoryAccounts(r);
-                    return;
-                });
+        setIsLoadingAccounts(true);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        loadCategories().then((r) => {
+            GetAccountsWithoutCategory(navigate).then((r) => {
+                setNoCategoryAccounts(r);
+                setIsLoadingAccounts(false);
                 return;
             });
-        }
+            return;
+        });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [categories, setCategories, navigate]);
+    }, []);
 
     const showModal = () => {
         setVisible(true);
@@ -111,58 +115,59 @@ export const Accounts = () => {
         tempNoAccount,
         tempActiveAccount,
     };
-
     return (
         <div className={'account-page-wrapper'}>
             <div className={'account-wrapper'}>
-                {user?.user.user_type !== "READER" && <ConnectButtons navigate={navigate} />}
+                <ConnectButtons navigate={navigate} />
                 <h2>Connected accounts</h2>
                 <hr />
-                {categories !== null && (
                     <ul>
-                        {categories.map((category) => {
-                            return (
-                                <div key={uuidv4()}>
-                                    <h3>{category.label}</h3>
+                        {!isLoadingAccounts && <>
+                            {categories.map((category) => {
+                                return (
+                                    <div key={uuidv4()}>
+                                        <h3>{category.label}</h3>
+                                        <AccountCard
+                                            key={uuidv4()}
+                                            accounts={category.accounts}
+                                            closeConnection={closeConnection}
+                                        />
+                                    </div>
+                                );
+                            })}
+
+                            {noCategoryAccounts.length !== 0 && (
+                                <>
+                                    <h3>Account without group</h3>
                                     <AccountCard
                                         key={uuidv4()}
-                                        accounts={category.accounts}
+                                        accounts={noCategoryAccounts}
                                         closeConnection={closeConnection}
                                     />
+                                </>
+                            )}
+                            {categories.length === 0 &&
+                            noCategoryAccounts.length === 0 && (
+                                <div className="bull-info">
+                                    Connect an account to start posting content.
                                 </div>
-                            );
-                        })}
-
-                        {noCategoryAccounts.length === 0 ? (
-                            ''
-                        ) : (
-                            <>
-                                <h3>Account without group</h3>
-                                <AccountCard
-                                    key={uuidv4()}
-                                    accounts={noCategoryAccounts}
-                                    closeConnection={closeConnection}
-                                />
-                            </>
-                        )}
-                        {categories.length === 0 &&
-                        noCategoryAccounts.length === 0 ? (
-                            <div className="bull-info">
-                                Connect an account to start posting content.
-                            </div>
-                        ) : (
-                            ''
-                        )}
+                            )}
+                        </>}
                     </ul>
-                )}
             </div>
             <div className={'category-wrapper'}>
-                <h2>Groups of accounts</h2>
-                {user?.user.user_type == 'ADMIN' &&                 <Button
-                    className={'big-square-blue'}
+                <div className={"flex"}>
+                    <div>
+                        <h2>Account Groups</h2>
+                    </div>
+
+                {user?.user.user_type == 'ADMIN' &&                <div> <Button
+                    className={'big-square-blue center-add-group'}
                     submit={showModal}
-                    title={'Add a group'}
-                />}
+                    title={'Add group'}
+                /></div>}
+
+                </div>
 
                 <ModalCategory modalParams={modalParams} />
                 <CategoryList

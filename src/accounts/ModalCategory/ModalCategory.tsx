@@ -131,7 +131,7 @@ export const ModalCategory = (props) => {
     return (
         <Modal
             visible={isVisible}
-            title={isEditable ? 'Modify a category' : 'Add a category'}
+            // title={isEditable ? 'Modify a category' : 'Add a category'}
             onOk={handleOk}
             onCancel={handleCancel}
             footer={[
@@ -146,6 +146,7 @@ export const ModalCategory = (props) => {
                     {isEditable ? 'Modify' : 'Create'}
                 </Button>,
             ]}>
+            <h2>{isEditable ? 'Modify a category' : 'Add a category'}</h2>
             <h3>Name</h3>
             <InputField value={categoryName} onChange={setCategoryNameField} placeholder={'Group name'}/>
             <h3>Color</h3>
