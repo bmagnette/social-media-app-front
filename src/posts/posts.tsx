@@ -68,7 +68,9 @@ export const Posts = () => {
             setIsLoadingAccounts(true);
             loadAccounts().then(r => {
                 loadCategories().then(r => {
-                    setIsLoadingAccounts(false);
+                    setTimeout(function(){
+                        setIsLoadingAccounts(false);
+                    }, 1000);
                 });
             });
         }

@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
-import {
-    CloseCategory,
-    GetAccountsByCategory,
-    GetAccountsWithoutCategory,
-    GetCategory,
-} from '../../services/services';
+import {CloseCategory, GetAccountsByCategory, GetAccountsWithoutCategory, GetCategory} from '../../services/services';
 import {CloseCircleFilled, FormOutlined} from '@ant-design/icons';
 import {useNavigate, useOutletContext} from 'react-router-dom';
 import {IUser} from '../../interface/IUser';
 import {WarningModal} from '../../shared/Modal/warning-modal/warning-modal';
+import Spinner from '../../shared/spinner/Spinner';
 
 export const CategoryList = (props) => {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -48,11 +44,12 @@ export const CategoryList = (props) => {
     };
     return (
         <>
-                <ul>
-                    {props.categories.map((category) => {
-                        return (
-                            <li key={category.id}>
-                                <div>
+            {isLoading && <Spinner/>}
+            <ul>
+                {props.categories.map((category) => {
+                    return (
+                        <li key={category.id}>
+                            <div>
                                     <span
                                         style={{
                                             borderRadius: '50px',
@@ -63,26 +60,26 @@ export const CategoryList = (props) => {
                                             width: '20px',
                                         }}
                                     />
-                                    {category.label} ({category.accounts.length}
-                                    )
-                                    {user?.user.user_type === "ADMIN" &&                                     <CloseCircleFilled
-                                        onClick={() => {
-                                            setIsDeleting(true);
-                                            setCategoryClicked(category.id);
-                                        }
-                                        }
-                                    />}
-                                    {user?.user.user_type == 'ADMIN' && (
+                                {category.label} ({category.accounts.length}
+                                )
+                                {user?.user.user_type === 'ADMIN' && <CloseCircleFilled
+                                    onClick={() => {
+                                        setIsDeleting(true);
+                                        setCategoryClicked(category.id);
+                                    }
+                                    }
+                                />}
+                                {user?.user.user_type == 'ADMIN' && (
                                     <FormOutlined
                                         onClick={() =>
                                             editCategoryModal(category.id)
                                         }
                                     />)}
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ul>
+                            </div>
+                        </li>
+                    );
+                })}
+            </ul>
             <WarningModal
                 visible={isDeleting}
                 handleOk={() => {

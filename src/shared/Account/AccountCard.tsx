@@ -10,6 +10,7 @@ import Facebook from '../../asset/images/facebook-icon.png';
 import React, {useState} from 'react';
 import './AccountCard.scss';
 import {AccountModal} from '../Modal/account-modal/account-modal';
+import Spinner from '../spinner/Spinner';
 
 export const AccountCard = (props) => {
 
@@ -47,8 +48,8 @@ export const AccountCard = (props) => {
         }
     };
     return (
-        <div className={"accounts-card-wrapper " + props?.className}>
-            {props.accounts.map((account) => {
+        <div className={'accounts-card-wrapper ' + props?.className}>
+            {props.isLoadingAccounts ? <Spinner/> : props.accounts.map((account) => {
                 const isCursor =
                     props.clickOnList && !account?.isActive
                         ? 'transparent'
@@ -62,14 +63,16 @@ export const AccountCard = (props) => {
                         onClick={
                             props.clickOnList
                                 ? () =>
-                                      props.clickOnList(
-                                          account.id,
-                                          props.accounts,
-                                          props.setAccounts,
-                                      )
+                                    props.clickOnList(
+                                        account.id,
+                                        props.accounts,
+                                        props.setAccounts,
+                                    )
                                 : () => {
-                                    setIsReadingAccount(true);
-                                    setReadingAccount(account);
+                                    if (!props.noClick) {
+                                        setIsReadingAccount(true);
+                                        setReadingAccount(account);
+                                    }
                                 }
                         }>
                         <div className={'profile-img-wrapper'}>
@@ -93,7 +96,7 @@ export const AccountCard = (props) => {
             })}
             {!props.isLoadingAccounts && props.accounts.length === 0 && (
                 <div className="bull-info">
-                    {!props.isLoadingAccounts ? 'Connect an account to start posting content.': ''}
+                    {!props.isLoadingAccounts ? 'Connect an account to start posting content.' : ''}
                 </div>
             )}
             {isReadingAccount && <AccountModal

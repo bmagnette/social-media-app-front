@@ -1,45 +1,36 @@
 import React, {ComponentType, useEffect, useState} from 'react';
 import {v4 as uuidv4} from 'uuid';
-import {
-    DeleteCalendarEvent, editEvent,
-    GetCategories,
-    GetPostBatch,
-} from '../services/services';
+import {DeleteCalendarEvent, editEvent, GetCategories, GetPostBatch} from '../services/services';
 import {DropdownField} from '../shared/Input/Dropdown';
 import './calendar.scss';
 import {useNavigate, useOutletContext} from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import {
+    AllDayPanel,
     Appointments,
     AppointmentTooltip,
     DateNavigator,
     DayView,
-    MonthView,
     DragDropProvider,
-    AllDayPanel,
-    Scheduler,
+    EditRecurrenceMenu,
+    MonthView,
     Resources,
+    Scheduler,
     Toolbar,
     ViewSwitcher,
-    WeekView, EditRecurrenceMenu,
+    WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import {
-    Resource,
-    ViewState,
-    EditingState,
-} from '@devexpress/dx-react-scheduler';
+import {EditingState, Resource, ViewState} from '@devexpress/dx-react-scheduler';
 import {PopoverOrigin} from '@material-ui/core';
 import {toast} from 'react-toastify';
 import Popover from '@material-ui/core/Popover/Popover';
-import {
-    CloseOutlined,
-    DeleteOutlined,
-    FormOutlined,
-} from '@ant-design/icons/lib';
+import {CloseOutlined, DeleteOutlined, FormOutlined} from '@ant-design/icons/lib';
 import {formatDate, shortFormatDate} from '../shared/tools/formatter';
 import {AccountCard} from '../shared/Account/AccountCard';
 import {WarningModal} from '../shared/Modal/warning-modal/warning-modal';
 import {IUser} from '../interface/IUser';
+import {EventModal} from './event-modal/event-modal';
+import Spinner from '../shared/spinner/Spinner';
 
 const categoryId = [
     {
@@ -78,19 +69,18 @@ const categoryId = [
 
 export const Calendar = () => {
     const [posts, setPosts] = useState([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [displayedPosts, setDisplayedPosts] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [dropdownValue, setDropdownValue] = useState();
     const [categories, setCategories] = useState([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [category, setCategory] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [post, setPost] = useState(null);
 
     const [dateCalendar, setDateCalendar] = useState(new Date());
+    const [eventData, setEventData] = useState(null);
     const navigate = useNavigate();
     const user = useOutletContext<IUser>();
 
@@ -109,7 +99,7 @@ export const Calendar = () => {
         const catego = categories.map((category: {label: string}) => {
             return category.label;
         });
-        if(user.user.user_type == 'ADMIN'){
+        if (user.user.user_type == 'ADMIN') {
             catego.push('Without a group');
         }
 
@@ -120,10 +110,14 @@ export const Calendar = () => {
     }
 
     useEffect(() => {
-        if(user){
-            loadEvents();
-            loadCategories();
-        }}, [user]);
+        if (user) {
+            setIsLoading(true);
+            loadEvents().then(r => {
+                loadCategories();
+                setIsLoading(false);
+            });
+        }
+    }, [user]);
 
     const currentDateChange = (date) => {
         setDateCalendar(date);
@@ -159,13 +153,13 @@ export const Calendar = () => {
                 accounts.push(batch.account);
             });
 
-            if(post.event_type === "DEFAULT"){
+            if (post.event_type === 'DEFAULT') {
                 let date = new Date(post.event_date * 1000);
                 const test = {
                     startDate: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
                     endDate: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
                     title: post.title,
-                    allDay: true,
+                    allDay: post.is_all_day,
                     accounts: accounts,
                     ownerId: post.category ? post.category.color : null,
                     post: post,
@@ -180,17 +174,17 @@ export const Calendar = () => {
                 ? new Date(post.schedule_date * 1000)
                 : new Date(post.created_at * 1000);
 
+            const categoryName = post.category?.label ? post.category?.label + ' - ' : '';
             const test = {
                 startDate: postedDate,
+                allDay: post.is_all_day,
                 endDate: new Date(postedDate.getTime() + 1000 * 10),
-                title: post?.posts.length === 0 ? '' : post?.posts[0].message,
+                title: categoryName + (post?.posts.length === 0 ? '' : post?.posts[0].message),
                 accounts: accounts,
                 ownerId: post.category ? post.category.color : null,
                 post: post,
                 id: post.id,
             };
-
-            console.log(test);
 
             res.push(test);
             return post;
@@ -211,11 +205,11 @@ export const Calendar = () => {
     };
 
     const Layout: ComponentType<AppointmentTooltip.LayoutProps> = ({
-        appointmentMeta,
-        visible,
-        onHide,
-        ...restProps
-    }) => {
+                                                                       appointmentMeta,
+                                                                       visible,
+                                                                       onHide,
+                                                                       ...restProps
+                                                                   }) => {
         const [isDeleting, setIsDeleting] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
 
@@ -233,7 +227,7 @@ export const Calendar = () => {
         };
         const onDelete = () => {
             if (appointmentMeta?.data.startDate < new Date()) {
-                toast.error("You can't delete an event in the past", {
+                toast.error('You can\'t delete an event in the past', {
                     position: 'top-right',
                     autoClose: 5000,
                     closeOnClick: true,
@@ -253,12 +247,16 @@ export const Calendar = () => {
                 {...restProps}>
                 <div className={'calendar-event-wrapper'}>
                     <div className={'calendar-event-tools'}>
-                        <FormOutlined onClick={onHide} />
-                        <DeleteOutlined onClick={onDelete} />
+                        <FormOutlined onClick={() => {
+                            onHide();
+                            setEventData(appointmentMeta?.data);
+                            setIsVisible(true);
+                        }}/>
+                        <DeleteOutlined onClick={onDelete}/>
                         {/*<EllipsisOutlined onClick={onHide} />*/}
-                        <CloseOutlined onClick={onHide} />
+                        <CloseOutlined onClick={onHide}/>
                     </div>
-                    <hr />
+                    <hr/>
                     <div className={'calendar-event-header'}>
                         {appointmentMeta?.data.title}
                     </div>
@@ -267,6 +265,7 @@ export const Calendar = () => {
                     </div>
                     {!appointmentMeta?.data.allDay && <AccountCard
                         key={uuidv4()}
+                        noClick={true}
                         accounts={appointmentMeta?.data.accounts}
                         className={'no-context-style'}
                     />}
@@ -290,8 +289,6 @@ export const Calendar = () => {
 
     const onCommitChanges = React.useCallback(({added, changed, deleted}) => {
         if (added) {
-            // const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-            // setData([...data, { id: startingAddedId, ...added }]);
         }
         if (changed) {
             const _id = Object.keys(changed)[0];
@@ -300,12 +297,9 @@ export const Calendar = () => {
             });
         }
         if (deleted !== undefined) {
-            // setData(data.filter(appointment => appointment.id !== deleted));
         }
         // setIsAppointmentBeingCreated(false);
     }, []);
-
-    // }, [setData, setIsAppointmentBeingCreated, data]);
 
     return (
         <>
@@ -313,33 +307,46 @@ export const Calendar = () => {
                 placeholder={'Select a category'}
                 options={dropdownOptions}
                 onChange={onDropdownChange}
-                controlClassName={"medium-dropdown"}
+                controlClassName={'medium-dropdown'}
                 value={dropdownValue}
             />
-            <Paper>
-                <Scheduler data={contructEvents(displayedPosts)} firstDayOfWeek={1}>
-                    <ViewState
-                        currentDate={dateCalendar}
-                        onCurrentDateChange={currentDateChange}
-                    />
-                    <EditingState onCommitChanges={onCommitChanges} />
-                    <EditRecurrenceMenu />
+            {isLoading ? <Spinner/> : <>
+                <Paper>
+                    <Scheduler data={contructEvents(displayedPosts)} firstDayOfWeek={1}>
+                        <ViewState
+                            currentDate={dateCalendar}
+                            onCurrentDateChange={currentDateChange}
+                        />
+                        <EditingState onCommitChanges={onCommitChanges}/>
+                        <EditRecurrenceMenu/>
 
-                    <MonthView />
-                    <WeekView />
-                    <DayView />
-                    <Toolbar />
-                    <AllDayPanel />
+                        <MonthView/>
+                        <WeekView/>
+                        <DayView/>
+                        <Toolbar/>
+                        <AllDayPanel/>
 
-                    <Appointments />
-                    <Resources data={resources} />
-                    <AppointmentTooltip layoutComponent={Layout} />
-                    <DateNavigator />
-                    <ViewSwitcher />
-                    <DragDropProvider   allowDrag={({ allDay }) => !allDay}
-                                        allowResize={() => false}/>
-                </Scheduler>
-            </Paper>
+                        <Appointments/>
+                        <Resources data={resources}/>
+                        <AppointmentTooltip layoutComponent={Layout}/>
+                        <DateNavigator/>
+                        <ViewSwitcher/>
+                        <DragDropProvider allowDrag={({allDay}) => !allDay}
+                                          allowResize={() => false}/>
+                    </Scheduler>
+                </Paper>
+                <EventModal
+                    data={eventData}
+                    visible={isVisible}
+                    handleCancel={() => {
+                        setIsVisible(false);
+                    }}
+                    handleOk={() => {
+                        console.log('in');
+                    }}/>
+            </>}
+
+
         </>
     );
 };

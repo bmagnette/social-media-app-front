@@ -30,8 +30,9 @@ export const Users = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
+        setIsLoading(true);
+
         getUsers().then((r) => {
-            setIsLoading(true);
             let res = [];
             r.data.data.map((user) => {
                 res.push({
@@ -50,8 +51,9 @@ export const Users = () => {
     }, []);
 
     const onDelete = (_id) => {
+        setIsLoading(true);
+
         deleteUser(_id).then((r) => {
-            setIsLoading(true);
 
             getUsers().then((r) => {
                 let res = [];

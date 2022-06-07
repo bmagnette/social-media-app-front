@@ -1,0 +1,10 @@
+.event-modal-wrapper{
+  min-height: 100vh;
+  min-width: 650px;
+  margin: 0;
+  top: 0;
+
+  .ant-modal-content{
+    min-height: 100vh;
+  }
+}
