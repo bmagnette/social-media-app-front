@@ -42,8 +42,10 @@
     flex-grow: 1;
     text-align: center;
     border: 1px solid beige;
+    border-top: 4px solid #03a9f4;
     background-color: #f8f9fa;
-    border-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
     box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
 
     h2 {
@@ -103,4 +105,19 @@
 .flex{
     display: flex;
     justify-content: space-around;
+}
+
+.flex-left{
+    display: flex;
+    justify-content: left;
+}
+
+.flex-center{
+    display: flex;
+    justify-content: center;
+}
+
+.flex-between{
+    display: flex;
+    justify-content: space-between;
 }

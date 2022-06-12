@@ -1,0 +1,26 @@
+.mosaiq-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  height: 450px;
+  overflow-y: scroll;
+  margin: 5px;
+
+  img{
+    cursor: pointer;
+    padding: 4px;
+
+    &:hover{
+      border: 2px solid red;
+    }
+  }
+}
+
+.mosaiq-element {
+  flex: 1 0 21%;
+  margin: 5px;
+  background-color: blue;
+}
+
+.selected{
+  border: 2px solid red;
+}

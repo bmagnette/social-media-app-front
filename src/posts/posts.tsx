@@ -6,7 +6,6 @@ import {AccountCard} from '../shared/Account/AccountCard';
 import './Posts.scss';
 import {Button} from '../shared/Input/Button';
 import {TabsInput} from '../shared/Tabs/Tabs/Tabs';
-import {ImageUploader} from './image-uploader/image-uploader';
 import {v4 as uuidv4} from 'uuid';
 import {toast} from 'react-toastify';
 import {useNavigate, useOutletContext} from 'react-router-dom';
@@ -16,6 +15,11 @@ import 'antd/dist/antd.css';
 import {Button as Btn, Dropdown, Menu} from 'antd';
 import {BulkModal} from './bulk-modal/bulk-modal';
 import {IUser} from '../interface/IUser';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import DefaultPicture from '../asset/images/default-image.jpg';
+import {SplashModal} from './splash-modal/splash-modal';
+import {CloseOutlined} from '@ant-design/icons/lib';
 
 export const Posts = () => {
 
@@ -31,12 +35,17 @@ export const Posts = () => {
     const [dropdownValue, setDropdownValue] = useState();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingUnSplash, setIsLoadingUnSplash] = useState(false);
+
     const [category, setCategory] = useState(null);
 
     const [isSchedulerVisible, setisSchedulerVisible] = useState(false);
     const [scheduleDate, setScheduleDate] = useState(null);
 
     const [isBulkUpload, setBulkUpload] = useState(false);
+
+    const [images, setImages] = useState([]);
+    const [imageURLs, setImageURLs] = useState([]);
     const navigate = useNavigate();
 
     async function loadCategories() {
@@ -46,10 +55,10 @@ export const Posts = () => {
         const catego = categories.map((category: {label: string}) => {
             return category.label;
         });
-        if(user.user.user_type == 'ADMIN'){
+        if (user.user.user_type == 'ADMIN') {
             catego.push('Without a group');
         } else {
-            if(categories){
+            if (categories) {
                 setAccounts(await GetAccountsByCategory(navigate, categories[0].id));
             }
         }
@@ -64,11 +73,11 @@ export const Posts = () => {
     }
 
     useEffect(() => {
-        if(user){
+        if (user) {
             setIsLoadingAccounts(true);
             loadAccounts().then(r => {
                 loadCategories().then(r => {
-                    setTimeout(function(){
+                    setTimeout(function() {
                         setIsLoadingAccounts(false);
                     }, 1000);
                 });
@@ -85,6 +94,8 @@ export const Posts = () => {
         const payload = {
             accounts: activeAccounts,
             message: message,
+            imageURLs: imageURLs,
+            images: images,
             ...schedulerPayload,
         };
 
@@ -100,6 +111,8 @@ export const Posts = () => {
                     setMessage('');
                     setIsLoading(false);
                     unselectAllAccounts(accounts);
+                    setImageURLs([]);
+                    setImages([]);
                 })
                 .catch(function(error) {
                     // if (error.response.status === 401) {
@@ -129,10 +142,6 @@ export const Posts = () => {
         }
     };
 
-    const handleChange = (event) => {
-        setMessage(event.target.value);
-    };
-
     const onDropdownChange = async (value) => {
         if (value.label === 'Without a group') {
             setAccounts(await GetAccountsWithoutCategory(navigate));
@@ -145,6 +154,8 @@ export const Posts = () => {
             setAccounts(await GetAccountsByCategory(navigate, category.id));
         }
         setMessage('');
+        setImageURLs([]);
+        setImages([]);
     };
 
     const unselectAllAccounts = (accounts) => {
@@ -208,6 +219,11 @@ export const Posts = () => {
         </Menu>
     );
 
+    const removeImgUrl = (uri) => {
+        const res = imageURLs.filter(imageURI => imageURI !== uri);
+        setImageURLs(res);
+    };
+
     return (
         <div className={'posts-wrapper'}>
             <div className={'selection-wrapper'}>
@@ -215,7 +231,7 @@ export const Posts = () => {
                     placeholder={'Select a group'}
                     options={dropdownOptions}
                     onChange={onDropdownChange}
-                    controlClassName={"medium-dropdown"}
+                    controlClassName={'medium-dropdown'}
                     value={dropdownValue}
                 />
                 <Dropdown overlay={menu}>
@@ -234,37 +250,83 @@ export const Posts = () => {
                 />
             </ul>
             <div>
-                    <form className={'post-form'}>
+                <form className={'post-form'}>
+                    <div className={'flex-left'}>
                         <div className="text-area-wrapper">
                             <TabsInput
                                 message={message}
-                                handleChange={handleChange}
+                                handleChange={(event) => setMessage(event.target.value)}
                                 onEmojiClick={onEmojiClick}
+                                onUnSplashClick={setIsLoadingUnSplash}
+                                onChangeFile={(e) => {
+                                    setImages([...images, e.target.files[0]]);
+                                    setImageURLs([...imageURLs, URL.createObjectURL(e.target.files[0])]);
+                                }}
+
                             />
                         </div>
-                        <ImageUploader/>
-                        <div className={'button-wrapper'}>
-                            <Button
-                                className={'large-square-blue'}
-                                title={'Post now'}
-                                disabled={isLoading}
-                                isLoading={isLoading}
-                                submit={() => submit({})}
-                            />
-                            <Button
-                                className={'large-square-blue'}
-                                title={'Schedule'}
-                                submit={showModal}
-                            />
-                            <Button
-                                className={'disabled'}
-                                title={'Add to draft'}
-                                submit={submit}
-                                disabled={true}
-                            />
+                        <div className={'images-wrapper'}>
+                            <div className={'flex-center'}>
+                                {imageURLs.length >= 1 ?
+                                    <div className={'image-wrapper'}><img src={imageURLs[0]} height={125} width={125}
+                                                                          alt={'test'}/><CloseOutlined
+                                        onClick={() => removeImgUrl(imageURLs[0])} className={'absolute-delete'}/>
+                                    </div> :
+                                    <img src={DefaultPicture} height={125} width={125} alt={'test'}/>}
+                                {imageURLs.length >= 2 ?
+                                    <div className={'image-wrapper'}><img src={imageURLs[1]} height={125} width={125}
+                                                                          alt={'test'}/><CloseOutlined
+                                        onClick={() => removeImgUrl(imageURLs[1])} className={'absolute-delete'}/>
+                                    </div> :
+                                    <img src={DefaultPicture} height={125} width={125} alt={'test'}/>}
+                            </div>
+                            <div className={'flex-center'}>
+                                {imageURLs.length >= 3 ?
+                                    <div className={'image-wrapper'}><img src={imageURLs[2]} height={125} width={125}
+                                                                          alt={'test'}/><CloseOutlined
+                                        onClick={() => removeImgUrl(imageURLs[2])} className={'absolute-delete'}/>
+                                    </div> :
+                                    <img src={DefaultPicture} height={125} width={125} alt={'test'}/>}
+                                {imageURLs.length >= 4 ?
+                                    <div className={'image-wrapper'}><img src={imageURLs[3]} height={125} width={125}
+                                                                          alt={'test'}/><CloseOutlined
+                                        onClick={() => removeImgUrl(imageURLs[3])} className={'absolute-delete'}/>
+                                    </div> :
+                                    <img src={DefaultPicture} height={125} width={125} alt={'test'}/>}
+                            </div>
                         </div>
-                    </form>
+                    </div>
+
+                    <div className={'button-wrapper '}>
+                        <Button
+                            className={'big-square blue'}
+                            title={'Post now'}
+                            disabled={isLoading}
+                            isLoading={isLoading}
+                            submit={() => submit({})}
+                        />
+                        <Button
+                            className={'big-square red'}
+                            title={'Schedule'}
+                            submit={showModal}
+                        />
+                        <Button
+                            className={'big-square green disabled'}
+                            title={'Add to draft'}
+                            submit={submit}
+                            disabled={true}
+                        />
+                    </div>
+                </form>
             </div>
+            <SplashModal
+                visible={isLoadingUnSplash}
+                handleCancel={() => {
+                    setIsLoadingUnSplash(false);
+                }}
+                setImageURLs={setImageURLs}
+                imageURLs={imageURLs}
+            />
             <BulkModal
                 visible={isBulkUpload}
                 handleCancel={() => setBulkUpload(false)}

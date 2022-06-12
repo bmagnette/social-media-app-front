@@ -13,6 +13,10 @@
         height: 40px;
         cursor: pointer;
         position: relative;
+
+        svg{
+            cursor: pointer;
+        }
         .widget-display {
             display: block;
         }

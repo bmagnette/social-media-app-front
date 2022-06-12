@@ -1,4 +1,4 @@
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import React from 'react';
 import './Tabs.scss';
@@ -25,7 +25,9 @@ export const TabsInput = (props) => {
                 />
                 <TextAreaWidget
                     onEmojiClick={props.onEmojiClick}
+                    onUnSplashClick={props.onUnSplashClick}
                     message={props.message.length}
+                    onChangeFile={props.onChangeFile}
                 />
             </TabPanel>
             <TabPanel>

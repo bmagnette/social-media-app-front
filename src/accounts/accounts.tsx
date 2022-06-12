@@ -118,22 +118,22 @@ export const Accounts = () => {
     const expirationLimit = 7;
     let accountsWithGroupExpired = [];
     categories.filter(category => {
-        const test =  category.accounts.filter(account => {
+        const test = category.accounts.filter(account => {
             const futureExpired = new Date(account.updated_at * 1000).getTime() + (account.expired_in * 1000);
             const daysDiff = (futureExpired - new Date().getTime()) / (1000 * 3600 * 24);
             if (daysDiff <= expirationLimit) {
-                account["day_before_expiration"] = daysDiff;
+                account['day_before_expiration'] = daysDiff;
                 return account;
             }
         });
-        accountsWithGroupExpired = accountsWithGroupExpired.concat(test)
+        accountsWithGroupExpired = accountsWithGroupExpired.concat(test);
     });
 
     const NoCategoryAccountsExpiredIn7Days = noCategoryAccounts.filter(account => {
         const futureExpired = new Date(account.updated_at * 1000).getTime() + (account.expired_in * 1000);
         const daysDiff = (futureExpired - new Date().getTime()) / (1000 * 3600 * 24);
         if (daysDiff <= expirationLimit) {
-            account["day_before_expiration"] = daysDiff;
+            account['day_before_expiration'] = daysDiff;
             return account;
         }
     });
@@ -150,11 +150,11 @@ export const Accounts = () => {
 
                 <ul>
                     {!isLoadingAccounts && <>
-                        <InfoMessage
+                        {accountsExpired.length !== 0 && <InfoMessage
                             type={'warning'}
                             description={'Expiring accounts'}
                             list={accountsExpired}
-                        />
+                        />}
                         {categories.map((category) => {
                             return (
                                 <div key={uuidv4()}>
@@ -194,7 +194,7 @@ export const Accounts = () => {
                     </div>
 
                     {user?.user.user_type == 'ADMIN' && <div><Button
-                        className={'big-square-blue center-add-group'}
+                        className={'big-square red center-add-group'}
                         submit={showModal}
                         title={'Add group'}
                     /></div>}
